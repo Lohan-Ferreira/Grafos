@@ -1,0 +1,80 @@
+# depslib dependency file v1.0
+1492546630 source:e:\particular\desenvolvimento\git\grafo\main.cpp
+	<iostream>
+
+1492549040 source:c:\users\gabriel\desktop\grafo\main.cpp
+	<iostream>
+	"ListaAresta.h"
+	"ListaVertice.h"
+
+1492549375 c:\users\gabriel\desktop\grafo\listaaresta.h
+	"NoListaAresta.h"
+
+1492547245 c:\users\gabriel\desktop\grafo\nolistaaresta.h
+	"Aresta.h"
+
+1492549390 c:\users\gabriel\desktop\grafo\aresta.h
+
+1492547644 c:\users\gabriel\desktop\grafo\listavertice.h
+	"NoListaVertice.h"
+
+1492549009 c:\users\gabriel\desktop\grafo\nolistavertice.h
+	"Vertice.h"
+
+1492549360 c:\users\gabriel\desktop\grafo\vertice.h
+
+1493063505 source:c:\users\gabriel\desktop\trabalho_grafos\main.cpp
+	<iostream>
+	<fstream>
+	"Grafo.h"
+
+1492549375 c:\users\gabriel\desktop\trabalho_grafos\listaaresta.h
+	"NoListaAresta.h"
+
+1492547245 c:\users\gabriel\desktop\trabalho_grafos\nolistaaresta.h
+	"Aresta.h"
+
+1492549390 c:\users\gabriel\desktop\trabalho_grafos\aresta.h
+
+1492547644 c:\users\gabriel\desktop\trabalho_grafos\listavertice.h
+	"NoListaVertice.h"
+
+1492549009 c:\users\gabriel\desktop\trabalho_grafos\nolistavertice.h
+	"Vertice.h"
+
+1492549360 c:\users\gabriel\desktop\trabalho_grafos\vertice.h
+
+1492717106 source:c:\users\hynax\desktop\ghdesouza-trabalho_grafos-bccdfcb1acba\main.cpp
+	<iostream>
+	"Grafo.h"
+
+1492776499 c:\users\hynax\desktop\ghdesouza-trabalho_grafos-bccdfcb1acba\grafo.h
+	"Lista.h"
+
+1492773604 c:\users\hynax\desktop\ghdesouza-trabalho_grafos-bccdfcb1acba\lista.h
+
+1493043468 source:c:\users\hynax\desktop\grafos\main.cpp
+	<iostream>
+	"Grafo.h"
+
+1493052524 c:\users\hynax\desktop\grafos\grafo.h
+	"Lista.h"
+
+1493051983 c:\users\hynax\desktop\grafos\lista.h
+
+1493062548 c:\users\gabriel\desktop\trabalho_grafos\grafo.h
+	"Lista.h"
+
+1493051983 c:\users\gabriel\desktop\trabalho_grafos\lista.h
+
+1493079832 source:c:\users\hynax\desktop\ghdesouza-trabalho_grafos-0af9ac1f718e\main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	"Grafo.h"
+
+1493080236 c:\users\hynax\desktop\ghdesouza-trabalho_grafos-0af9ac1f718e\grafo.h
+	"Lista.h"
+
+1493079923 c:\users\hynax\desktop\ghdesouza-trabalho_grafos-0af9ac1f718e\lista.h
+
