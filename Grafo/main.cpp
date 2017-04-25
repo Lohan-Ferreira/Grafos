@@ -31,7 +31,8 @@ int main(){
 
     file.close();
     grafo->sequenciaGraus();
-    //grafo->caminhoMinimo(1,3,1);
+    cout<<endl;
+    grafo->floyd(4,2);
 
     cout<<"COMPILOU \\O/"<<endl;
     return 0;

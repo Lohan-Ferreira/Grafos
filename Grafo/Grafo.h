@@ -8,6 +8,7 @@ class Grafo{
             Lista_vertice = new ListaVertice();
             digrafo = dig;
             gera_id_v=1;
+            num_nos=0;
         }
 
         ~Grafo(){}
@@ -172,6 +173,63 @@ class Grafo{
 
 
 */
+
+ void floyd(int a , int b)
+ {
+
+     float matriz[gera_id_v][gera_id_v];
+     NoListaAresta* aux_ar;
+     NoListaVertice* aux_ver;
+     aux_ver=Lista_vertice->Getraiz();
+
+     for(int i=1;i<gera_id_v;i++)
+        for(int j=1;j<gera_id_v;j++)
+     {
+
+
+            if(i==j)matriz[i][j]=0;
+            else matriz[i][j]=9999;
+     }
+     while(aux_ver!=NULL)
+     {
+         aux_ar=aux_ver->getVertice()->getArestas()->getraiz();
+         while(aux_ar!=NULL)
+         {
+
+             matriz[aux_ar->getAresta()->getAnterior()->getId()][aux_ar->getAresta()->getProximo()->getId()] = aux_ar->getAresta()->getPeso();
+             std::cout<< matriz[aux_ar->getAresta()->getAnterior()->getId()][aux_ar->getAresta()->getProximo()->getId()] <<std::endl;
+             aux_ar=aux_ar->getProximo();
+         }
+         aux_ver=aux_ver->getProximo();
+     }
+        std::cout<<a;
+     for(int i=1;i<gera_id_v;i++)
+     {
+        for(int j=1;j<gera_id_v;j++)
+        {
+            for(int k=1;k<gera_id_v;k++)
+            {
+                if(matriz[i][j]>matriz[i][k]+matriz[k][j])
+                {
+                    matriz[i][j]=matriz[i][k]+matriz[k][j];
+                    if(i==a&&j==b)std::cout<<"-->"<<k;
+                }
+            }
+        }
+
+     }
+    std::cout<<"-->"<<b<<std::endl;
+
+    /*IMPRIME TODA A MATRIZ!!
+     for(int i=1;i<gera_id_v;i++)
+     {
+         for(int j=1;j<gera_id_v;j++)
+            std::cout<<matriz[i][j]<<"\t";
+         std::cout<<std::endl;
+     }
+
+    */
+ }
 void troca (int* vet, int a, int b){
     int aux = vet[a];
     vet[a] = vet[b];
