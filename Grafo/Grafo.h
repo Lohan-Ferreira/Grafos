@@ -7,7 +7,7 @@ class Grafo{
         Grafo(bool dig){
             Lista_vertice = new ListaVertice();
             digrafo = dig;
-            gera_id_v=0;
+            gera_id_v=1;
         }
 
         ~Grafo(){}
@@ -25,12 +25,26 @@ class Grafo{
             }
 
         }
-    int menor(float v[], int n)
+    int menorPi(float v[], int n)
     {
-        float menor = v[0];
-        int indice=0;
-        for(int i=1;i<n;i++)
-            if(menor>v[i])
+        int indice;
+        float menor;
+        NoListaVertice* tmp = Lista_vertice->Getraiz();
+
+        while(tmp!=NULL)
+        {
+            if(tmp->getVertice()->getFlag()== 0)
+            {
+                indice=tmp->getVertice()->getId();
+                break;
+            }
+            tmp=tmp->getProximo();
+
+        }
+         menor = v[indice];
+
+        for(int i=0;i<n;i++)
+            if(menor>v[i] && Lista_vertice->buscaVertice(i)->getVertice()->getFlag()== 0)
             {
                 menor=v[i];
                 indice=i;
@@ -90,16 +104,22 @@ class Grafo{
 
 
         }
-
+/*
     void caminhoMinimo(int a, int b, bool dijskra)
     {
-         limpaVert();
+
+        //limpaVert();
+
         if(dijskra)
         {
             std::cout<<"Procurando o menor caminho pelo metodo de Dijkstra"<<std::endl;
             // 0 = S' && 1 = S //
-            float pi[num_nos];
-            int seletor;
+            ListaVertice *lista=new ListaVertice();
+            lista->addVertice(new Vertice(a,0,0,0));
+            float pi[num_nos+1];
+            for(int i=0;i<num_nos+1;i++)
+                pi[i]=999999999999;
+            int seletor,seletor_ant;
             Vertice* va = Lista_vertice->buscaVertice(a)->getVertice();
             va->setFlag(1);
             NoListaAresta *tmp=va->getArestas()->getraiz();
@@ -108,8 +128,9 @@ class Grafo{
                 pi[tmp->getAresta()->getProximo()->getId()]=tmp->getAresta()->getPeso();
                 tmp=tmp->getProximo();
             }
-
-            seletor = menor(pi,num_nos);
+            seletor_ant=a;
+            seletor = menorPi(pi,num_nos+1);
+            lista->addVertice(new Vertice(seletor,0,0,0));
             va=Lista_vertice->buscaVertice(seletor)->getVertice();
             va->setFlag(1);
 
@@ -122,19 +143,77 @@ class Grafo{
                 pi[tmp->getAresta()->getProximo()->getId()]=pi[seletor]+tmp->getAresta()->getPeso();
                 tmp=tmp->getProximo();
             }
-            seletor = menor(pi,num_nos);
-            //PRECISO CONSERTAR O SELETOR
+            seletor_ant=seletor;
+            seletor = menorPi(pi,num_nos+1);
+
+            if(buscaAresta(seletor_ant,seletor)!=NULL)
+            {
+            lista->addVertice(new Vertice(seletor,0,0,0));
             va=Lista_vertice->buscaVertice(seletor)->getVertice();
             va->setFlag(1);
-
             }
-
-
-
+            else
+            {
+                lista->deletaVertice(seletor_ant);
+                lista->addVertice(new Vertice(seletor,0,0,0));
+                va=Lista_vertice->buscaVertice(seletor)->getVertice();
+                va->setFlag(1);
+            }
+            }
+            NoListaVertice* imprime = lista->Getraiz();
+            while(imprime!=NULL)
+            {
+            std::cout<<imprime->getVertice()->getId()<<"-->";
+            imprime=imprime->getProximo();
+            }
 
         }
     }
 
+
+*/
+void troca (int* vet, int a, int b){
+    int aux = vet[a];
+    vet[a] = vet[b];
+    vet[b] = aux;
+
+}
+
+void sorting(int *vet, int n)
+{
+    int iaux, i,j;
+
+    for(i=0;i<n-1;i++)
+    {
+        iaux=i;
+        for(j=i+1;j<n;j++){
+            if(vet[j] <vet[iaux])
+                iaux=j;
+        }
+        if(iaux != i)
+            troca(vet,iaux,i);
+    }
+}
+    void sequenciaGraus()
+    {
+        int graus[num_nos];
+        for(int i=0;i<num_nos;i++)
+            graus[i]=verifGrau(i+1);
+        sorting(graus,num_nos);
+        for(int i=0;i<num_nos;i++)
+        std::cout<<graus[i];
+    }
+
+    Aresta* buscaAresta(int a, int b)
+    {
+        NoListaAresta* tmp=Lista_vertice->buscaVertice(a)->getVertice()->getArestas()->getraiz();
+        while(tmp!=NULL)
+        {
+            if(tmp->getAresta()->getProximo()->getId()== b) return tmp->getAresta();
+            tmp=tmp->getProximo();
+        }
+         return NULL;
+    }
     bool verificaBipartido(){
             NoListaVertice* aux_ver = Lista_vertice->Getraiz();
             while(aux_ver != NULL){
@@ -211,8 +290,10 @@ class Grafo{
         {   Vertice* ant;
             Vertice* prox;
             ant=Lista_vertice->buscaVertice(a)->getVertice();
+
             prox=Lista_vertice->buscaVertice(b)->getVertice();
             ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
+
             if(grau<verifGrau(a)) grau = verifGrau(a);
         }
 
@@ -305,7 +386,7 @@ class Grafo{
 
         void limpaVert()
         {
-            NoListaVertice * aux_ver = Lista_vertice->Getraiz();
+            NoListaVertice* aux_ver = Lista_vertice->Getraiz();
             while(aux_ver != NULL){
                 aux_ver->getVertice()->setFlag(0);
                 aux_ver->getProximo();

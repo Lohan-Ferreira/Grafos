@@ -78,3 +78,14 @@
 
 1493079923 c:\users\hynax\desktop\ghdesouza-trabalho_grafos-0af9ac1f718e\lista.h
 
+1493128925 source:c:\users\hynax\desktop\grafo\main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	"Grafo.h"
+
+1493128908 c:\users\hynax\desktop\grafo\grafo.h
+	"Lista.h"
+
+1493127721 c:\users\hynax\desktop\grafo\lista.h
+

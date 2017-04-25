@@ -174,11 +174,15 @@ class ListaVertice{
         }
 
         bool deletaVertice(int id){
+
             NoListaVertice *tmp = buscaVertice(id);
             if(tmp == NULL) return false;
+            if(tmp->getAnterior()!=NULL)
             tmp->getAnterior()->setProximo(tmp->getProximo());
+            if(tmp->getProximo()!=NULL)
             tmp->getProximo()->setAnterior(tmp->getAnterior());
             delete tmp;
+            return true;
         }
 
 };
