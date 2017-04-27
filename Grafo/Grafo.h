@@ -1,36 +1,55 @@
+/** Implementação da classe Grafo */
+/*  A classe grafo representa seus dados por meio das classes Vertice e Aresta, ambas incluidas a este documento.
+    A estrutura contém uma lista encadeada de Vertives sendo que estes contém uma lista encadea de arestas.
+    Cada aresta possui informação sobre a origem e destino da mesma. */
+
 #ifndef GRAFO_H
 #define GRAFO_H
 #include "Lista.h"
 
 class Grafo{
+
+    /// Atributos
+    private:
+        bool digrafo;
+        int grau;
+        int ordem;
+        int num_arestas;
+        int num_nos;
+        int gera_id_v;
+        int gera_id_a;
+        ListaVertice * Lista_vertice;
+
+
+    /// Métodos
     public:
+
         Grafo(bool dig){
             Lista_vertice = new ListaVertice();
             digrafo = dig;
             gera_id_v=1;
             num_nos=0;
         }
-
         ~Grafo(){}
 
+        //Retorna o Grau de um Nó com um certo id
         int verifGrau(int id)
         {
             if(id<=gera_id_v)
                 return Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getQuantidade();
             else
             {
-
-
-                std::cout<<("Nó não pertence ao grafo!");
                 return 0;
             }
 
         }
-    int menorPi(float v[], int n)
-    {
-        int indice;
-        float menor;
-        NoListaVertice* tmp = Lista_vertice->Getraiz();
+
+
+        int menorPi(float v[], int n)
+        {
+            int indice;
+            float menor;
+            NoListaVertice* tmp = Lista_vertice->Getraiz();
 
         while(tmp!=NULL)
         {
@@ -42,7 +61,8 @@ class Grafo{
             tmp=tmp->getProximo();
 
         }
-         menor = v[indice];
+
+        menor = v[indice];
 
         for(int i=0;i<n;i++)
             if(menor>v[i] && Lista_vertice->buscaVertice(i)->getVertice()->getFlag()== 0)
@@ -52,7 +72,9 @@ class Grafo{
             }
 
         return indice;
-    }
+        }
+
+        //Verifica se o grafo tem regularidade k informada
         bool verificaKregular (int k)
         {
             if(num_nos>0)
@@ -71,8 +93,9 @@ class Grafo{
             else return false;
         }
 
+        //Verifica se o grafo é um multigrafo (busca por arestas paralelas)
         bool verifica_multigrafo()
-       {
+        {
             NoListaVertice * aux_ver = Lista_vertice->Getraiz();
             while(aux_ver != NULL){
                 NoListaAresta * aux_ar1 = aux_ver->getVertice()->getArestas()->getraiz();
@@ -91,6 +114,7 @@ class Grafo{
             return false;
        }
 
+        //Verifica se o grafo é completo
         bool verifCompleto()
         {
             if(verifica_multigrafo()) return false;
@@ -105,6 +129,395 @@ class Grafo{
 
 
         }
+
+        //Aplica o algorítimo de floyd
+        void menorCaminhoFloyd(int a , int b)
+         {
+             float* matriz[gera_id_v];
+             for(int i=0;i<gera_id_v;i++)
+                matriz[i]=new float[gera_id_v];
+
+             NoListaAresta* aux_ar;
+             NoListaVertice* aux_ver;
+             aux_ver=Lista_vertice->Getraiz();
+
+             for(int i=1;i<gera_id_v;i++)
+                for(int j=1;j<gera_id_v;j++)
+             {
+                    if(i==j)matriz[i][j]=0;
+                    else matriz[i][j]=9999;
+             }
+             while(aux_ver!=NULL)
+             {
+                 aux_ar=aux_ver->getVertice()->getArestas()->getraiz();
+                 while(aux_ar!=NULL)
+                 {
+
+                     matriz[aux_ar->getAresta()->getAnterior()->getId()][aux_ar->getAresta()->getProximo()->getId()] = aux_ar->getAresta()->getPeso();
+                     aux_ar=aux_ar->getProximo();
+                 }
+                 aux_ver=aux_ver->getProximo();
+             }
+                std::cout<<a;
+             for(int i=1;i<gera_id_v;i++)
+             {
+                for(int j=1;j<gera_id_v;j++)
+                {
+                    for(int k=1;k<gera_id_v;k++)
+                    {
+                        if(matriz[i][j]>matriz[i][k]+matriz[k][j])
+                        {
+                            matriz[i][j]=matriz[i][k]+matriz[k][j];
+                            if(i==a&&j==b)std::cout<<"-->"<<k;
+                        }
+                    }
+                }
+
+             }
+            std::cout<<"-->"<<b<<std::endl;
+
+
+            /*IMPRIME TODA A MATRIZ!!
+             for(int i=1;i<gera_id_v;i++)
+             {
+                 for(int j=1;j<gera_id_v;j++)
+                    std::cout<<matriz[i][j]<<"\t";
+                 std::cout<<std::endl;
+             }
+
+            */
+         }
+
+        //função auxiliar para swap em um ponteiro
+
+                float** geraFloyd()
+         {
+             float* matriz[gera_id_v];
+             for(int i=0;i<gera_id_v;i++)
+                matriz[i]=new float[gera_id_v];
+
+             NoListaAresta* aux_ar;
+             NoListaVertice* aux_ver;
+             aux_ver=Lista_vertice->Getraiz();
+
+             for(int i=1;i<gera_id_v;i++)
+                for(int j=1;j<gera_id_v;j++)
+             {
+                    if(i==j)matriz[i][j]=0;
+                    else matriz[i][j]=9999;
+             }
+             while(aux_ver!=NULL)
+             {
+                 aux_ar=aux_ver->getVertice()->getArestas()->getraiz();
+                 while(aux_ar!=NULL)
+                 {
+
+                     matriz[aux_ar->getAresta()->getAnterior()->getId()][aux_ar->getAresta()->getProximo()->getId()] = aux_ar->getAresta()->getPeso();
+                     aux_ar=aux_ar->getProximo();
+                 }
+                 aux_ver=aux_ver->getProximo();
+             }
+
+             for(int i=1;i<gera_id_v;i++)
+             {
+                for(int j=1;j<gera_id_v;j++)
+                {
+                    for(int k=1;k<gera_id_v;k++)
+                    {
+                        if(matriz[i][j]>matriz[i][k]+matriz[k][j])
+                        {
+                            matriz[i][j]=matriz[i][k]+matriz[k][j];
+                        }
+                    }
+                }
+
+             }
+           /* IMPRIME TODA A MATRIZ!!
+             for(int i=1;i<gera_id_v;i++)
+             {
+                 for(int j=1;j<gera_id_v;j++)
+                    std::cout<<matriz[i][j]<<"\t";
+                 std::cout<<std::endl;
+             }
+            */
+
+
+
+
+            return matriz;
+
+         }
+
+
+        void fechoDireto(int a)
+        {
+            std::cout<<"Fecho direto do vertice "<<a<<":";
+            float** matriz=geraFloyd();
+            for(int i=1;i<gera_id_v;i++)
+                if(matriz[a][i]!=9999)
+                    std::cout<<i<<" ";
+            std::cout<<std::endl;
+
+        }
+            void fechoIndireto(int a)
+        {
+            std::cout<<"Fecho indireto do vertice "<<a<<":";
+            float** matriz=geraFloyd();
+            for(int i=1;i<gera_id_v;i++)
+                if(matriz[i][a]!=9999)
+                    std::cout<<i<<" ";
+            std::cout<<std::endl;
+
+
+        }
+        void troca (int* vet, int a, int b)
+        {
+            int aux = vet[a];
+            vet[a] = vet[b];
+            vet[b] = aux;
+
+        }
+
+        //Função para ordenação dos valores no vetor - (booble)
+        void sorting(int *vet, int n)
+        {
+            int iaux, i,j;
+
+            for(i=0;i<n-1;i++)
+            {
+                iaux=i;
+                for(j=i+1;j<n;j++){
+                    if(vet[j] <vet[iaux])
+                        iaux=j;
+                }
+                if(iaux != i)
+                    troca(vet,iaux,i);
+            }
+        }
+
+
+        //Função que imprime todos os graus dos vertives do grafico em ordem crescente
+        void sequenciaGraus()
+        {
+            int graus[gera_id_v];
+            for(int i=1;i<gera_id_v;i++)
+                graus[i]=verifGrau(i);
+            sorting(graus,gera_id_v);
+            for(int i=0;i<gera_id_v-1;i++)
+            std::cout<<graus[i];
+        }
+
+        bool verificaEuleriano()
+        {
+            int graus[gera_id_v];
+            for(int i=1;i<gera_id_v;i++)
+            {
+                graus[i]=verifGrau(i);
+                if(graus[i]%2!=0)return false;
+            }
+            return true;
+        }
+
+
+        Aresta* buscaAresta(int a, int b)
+        {
+            NoListaAresta* tmp=Lista_vertice->buscaVertice(a)->getVertice()->getArestas()->getraiz();
+            while(tmp!=NULL)
+            {
+                if(tmp->getAresta()->getProximo()->getId()== b) return tmp->getAresta();
+                tmp=tmp->getProximo();
+            }
+             return NULL;
+        }
+
+        //Função que verifica se o grafo é bipartido
+        bool verificaBipartido(){
+                NoListaVertice* aux_ver = Lista_vertice->Getraiz();
+                while(aux_ver != NULL){
+                    aux_ver->getVertice()->setVizitado(0);
+                    aux_ver->getVertice()->setFlag(0);
+                    aux_ver = aux_ver->getProximo();
+                    std::cout<<"ruan  ";
+              }
+                aux_ver = Lista_vertice->Getraiz();
+                for(int i = 0; i < Lista_vertice->Getquantidade(); i++){
+                    if(aux_ver->getVertice()->getVizitado() == 0)
+                       {
+                        Vertice* v = aux_ver->getVertice();
+                        if(!verificaBiProf(v, v->getFlag(), v->getVizitado()))
+                            return false;
+                       }
+                }
+                return true;
+            }
+
+        //Função auxiliar para a função de verifica bipartido
+        bool verificaBiProf(Vertice* vertice, bool cor, bool viz){
+
+        if((vertice->getVizitado() == 1) && (vertice->getFlag() != cor)){
+            return false;
+        }
+        else{
+            vertice->setFlag(cor);
+            vertice->setVizitado(viz);
+        }
+
+        NoListaAresta * aux_ar = vertice->getArestas()->getraiz();
+        while(aux_ar != NULL){
+            if(vertice->getVizitado() == 0)
+                verificaBiProf(aux_ar->getAresta()->getProximo(), !cor, 1);
+            aux_ar = aux_ar->getProximo();
+        }
+        return true;
+    }
+
+        //Retorna a ordem do grafo
+        int ordemGrafo()
+        {
+            return num_nos;
+        }
+
+        //Retorna o grau do grafo
+        int grauGrafo()
+        {   return grau;
+        }
+
+        //Adiciona um vertive no grafo com peso
+        void addVertice(float peso)
+        {
+            Lista_vertice->addVertice(new Vertice(gera_id_v,peso,0,0));
+            gera_id_v++;
+            num_nos++;
+        }
+
+        //Adiciona um vertice no grafo sem peso
+        void addVertice()
+        {
+            Lista_vertice->addVertice(new Vertice(gera_id_v,0,0,0));
+            gera_id_v++;
+            num_nos++;
+        }
+
+        //Adiciona uma aresta no grafo
+        void addAresta(int a , int b, float p)
+        {   Vertice* ant;
+            Vertice* prox;
+            ant=Lista_vertice->buscaVertice(a)->getVertice();
+
+            prox=Lista_vertice->buscaVertice(b)->getVertice();
+            ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
+
+            if(grau<verifGrau(a)) grau = verifGrau(a);
+        }
+
+        //verifica se o grafo é trivial
+        bool grafoTrivial ()
+        {
+            if(num_nos==1) return true;
+            else return false;
+        }
+
+        //verifica se o grafo é nulo
+        bool grafoNulo ()
+        {
+            if(num_nos==0) return true;
+            else return false;
+        }
+
+        //imprime a vizinhanca Aberta de um nó com um certo id
+        void vizinhancaAberta(int id)
+        {
+            if(id<=num_nos&&id>0)
+            {
+                std::cout<<"A vizinhança aberta do nó:"<<id<<" Possui os nós:";
+                NoListaAresta* tmp = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getraiz();
+                int qnt = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getQuantidade();
+                int v[qnt],i=0,j,k;
+                while(tmp!=NULL)
+                {
+                    v[i]=tmp->getAresta()->getProximo()->getId();
+                    std::cout<<v[i];
+                    tmp=tmp->getProximo();
+                    i++;
+                }
+                std::cout<<std::endl<<"Com as arestas:";
+                for(j=0;j<qnt;j++)
+                {
+
+                    for( k=0;k<qnt;k++)
+                    {
+                        tmp = Lista_vertice->buscaVertice(v[j])->getVertice()->getArestas()->getraiz();
+                        while(tmp!=NULL)
+                        {
+                            if(v[k] == tmp->getAresta()->getProximo()->getId())
+                                std::cout<<v[j]<<"-->"<<v[k]<<" ";
+                            tmp=tmp->getProximo();
+                        }
+                    }
+                    std::cout<<std::endl;
+                }
+
+            }
+        }
+
+        //imprime a vizinhanca Fechada de um nó com um certo id
+        void vizinhancaFechada(int id)
+        {
+            if(id<=num_nos&&id>0)
+            {
+                std::cout<<"A vizinhança fechada do nó:"<<id<<" Possui os nós:";
+                NoListaAresta* tmp = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getraiz();
+                int qnt = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getQuantidade() + 1;
+                int v[qnt],i=1,j,k;
+                v[0]= id;
+                std::cout<<v[0];
+                while(tmp!=NULL)
+                {
+                    v[i]=tmp->getAresta()->getProximo()->getId();
+                    std::cout<<v[i];
+                    tmp=tmp->getProximo();
+                    i++;
+                }
+                std::cout<<std::endl<<"Com as arestas:";
+                for(j=0;j<qnt;j++)
+                {
+
+                    for( k=0;k<qnt;k++)
+                    {
+                        tmp = Lista_vertice->buscaVertice(v[j])->getVertice()->getArestas()->getraiz();
+                        while(tmp!=NULL)
+                        {
+                            if(v[k] == tmp->getAresta()->getProximo()->getId())
+                                std::cout<<v[j]<<"-->"<<v[k]<<" ";
+                            tmp=tmp->getProximo();
+                        }
+                    }
+                    std::cout<<std::endl;
+                }
+
+            }
+        }
+
+        //limpa os valores das flags nos objetos Vertices
+        void limpaVert()
+        {
+            NoListaVertice* aux_ver = Lista_vertice->Getraiz();
+            while(aux_ver != NULL){
+                aux_ver->getVertice()->setFlag(0);
+                aux_ver = aux_ver->getProximo();
+            }
+        }
+
+
+
+
+/*  void addVertice(float peso, int id)
+        {
+            Lista_vertice->addVertice(new Vertice(id,peso,0,0));
+            num_nos++;
+        }
+     */
+
 /*
     void caminhoMinimo(int a, int b, bool dijskra)
     {
@@ -174,293 +587,8 @@ class Grafo{
 
 */
 
- void floyd(int a , int b)
- {
-
-     float matriz[gera_id_v][gera_id_v];
-     NoListaAresta* aux_ar;
-     NoListaVertice* aux_ver;
-     aux_ver=Lista_vertice->Getraiz();
-
-     for(int i=1;i<gera_id_v;i++)
-        for(int j=1;j<gera_id_v;j++)
-     {
 
 
-            if(i==j)matriz[i][j]=0;
-            else matriz[i][j]=9999;
-     }
-     while(aux_ver!=NULL)
-     {
-         aux_ar=aux_ver->getVertice()->getArestas()->getraiz();
-         while(aux_ar!=NULL)
-         {
-
-             matriz[aux_ar->getAresta()->getAnterior()->getId()][aux_ar->getAresta()->getProximo()->getId()] = aux_ar->getAresta()->getPeso();
-             std::cout<< matriz[aux_ar->getAresta()->getAnterior()->getId()][aux_ar->getAresta()->getProximo()->getId()] <<std::endl;
-             aux_ar=aux_ar->getProximo();
-         }
-         aux_ver=aux_ver->getProximo();
-     }
-        std::cout<<a;
-     for(int i=1;i<gera_id_v;i++)
-     {
-        for(int j=1;j<gera_id_v;j++)
-        {
-            for(int k=1;k<gera_id_v;k++)
-            {
-                if(matriz[i][j]>matriz[i][k]+matriz[k][j])
-                {
-                    matriz[i][j]=matriz[i][k]+matriz[k][j];
-                    if(i==a&&j==b)std::cout<<"-->"<<k;
-                }
-            }
-        }
-
-     }
-    std::cout<<"-->"<<b<<std::endl;
-
-    /*IMPRIME TODA A MATRIZ!!
-     for(int i=1;i<gera_id_v;i++)
-     {
-         for(int j=1;j<gera_id_v;j++)
-            std::cout<<matriz[i][j]<<"\t";
-         std::cout<<std::endl;
-     }
-
-    */
- }
-void troca (int* vet, int a, int b){
-    int aux = vet[a];
-    vet[a] = vet[b];
-    vet[b] = aux;
-
-}
-
-void sorting(int *vet, int n)
-{
-    int iaux, i,j;
-
-    for(i=0;i<n-1;i++)
-    {
-        iaux=i;
-        for(j=i+1;j<n;j++){
-            if(vet[j] <vet[iaux])
-                iaux=j;
-        }
-        if(iaux != i)
-            troca(vet,iaux,i);
-    }
-}
-    void sequenciaGraus()
-    {
-        int graus[num_nos];
-        for(int i=0;i<num_nos;i++)
-            graus[i]=verifGrau(i+1);
-        sorting(graus,num_nos);
-        for(int i=0;i<num_nos;i++)
-        std::cout<<graus[i];
-    }
-
-    Aresta* buscaAresta(int a, int b)
-    {
-        NoListaAresta* tmp=Lista_vertice->buscaVertice(a)->getVertice()->getArestas()->getraiz();
-        while(tmp!=NULL)
-        {
-            if(tmp->getAresta()->getProximo()->getId()== b) return tmp->getAresta();
-            tmp=tmp->getProximo();
-        }
-         return NULL;
-    }
-    bool verificaBipartido(){
-            NoListaVertice* aux_ver = Lista_vertice->Getraiz();
-            while(aux_ver != NULL){
-                aux_ver->getVertice()->setVizitado(0);
-                aux_ver->getVertice()->setFlag(0);
-                aux_ver->getProximo();
-            }
-            aux_ver = Lista_vertice->Getraiz();
-            for(int i = 0; i < Lista_vertice->Getquantidade(); i++){
-                if(aux_ver->getVertice()->getVizitado() == 0)
-                   {
-
-                    Vertice* v = aux_ver->getVertice();
-                    if(!verificaBiProf(v, v->getFlag(), v->getVizitado()))
-                        return false;
-                   }
-            }
-            return true;
-        }
-
-           bool verificaBiProf(Vertice* vertice, bool cor, bool viz){
-
-            if((vertice->getVizitado() == 1) && (vertice->getFlag() != cor)){
-                return false;
-            }
-            else{
-                vertice->setFlag(cor);
-                vertice->setVizitado(viz);
-            }
-
-            NoListaAresta * aux_ar = vertice->getArestas()->getraiz();
-            while(aux_ar != NULL){
-                if(vertice->getVizitado() == 0)
-                    verificaBiProf(aux_ar->getAresta()->getProximo(), !cor, 1);
-                aux_ar = aux_ar->getProximo();
-            }
-            return true;
-        }
-
-
-
-
-
-
-        int ordemGrafo()
-        {
-            return num_nos;
-        }
-
-        int grauGrafo()
-        {   return grau;
-        }
-
-        void addVertice(float peso)
-        {
-            Lista_vertice->addVertice(new Vertice(gera_id_v,peso,0,0));
-            gera_id_v++;
-            num_nos++;
-        }
-        void addVertice()
-        {
-            Lista_vertice->addVertice(new Vertice(gera_id_v,0,0,0));
-            gera_id_v++;
-            num_nos++;
-        }
-
-      /*  void addVertice(float peso, int id)
-        {
-            Lista_vertice->addVertice(new Vertice(id,peso,0,0));
-            num_nos++;
-        }
-     */
-        void addAresta(int a , int b, float p)
-        {   Vertice* ant;
-            Vertice* prox;
-            ant=Lista_vertice->buscaVertice(a)->getVertice();
-
-            prox=Lista_vertice->buscaVertice(b)->getVertice();
-            ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
-
-            if(grau<verifGrau(a)) grau = verifGrau(a);
-        }
-
-        bool grafoTrivial ()
-        {
-            if(num_nos==1) return true;
-            else return false;
-        }
-
-        bool grafoNulo ()
-
-        {
-            if(num_nos==0) return true;
-            else return false;
-        }
-
-        void vizinhancaAberta(int id)
-        {
-            if(id<=num_nos&&id>0)
-            {
-                std::cout<<"A vizinhança aberta do nó:"<<id<<" Possui os nós:";
-                NoListaAresta* tmp = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getraiz();
-                int qnt = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getQuantidade();
-                int v[qnt],i=0,j,k;
-                while(tmp!=NULL)
-                {
-                    v[i]=tmp->getAresta()->getProximo()->getId();
-                    std::cout<<v[i];
-                    tmp=tmp->getProximo();
-                    i++;
-                }
-                std::cout<<std::endl<<"Com as arestas:";
-                for(j=0;j<qnt;j++)
-                {
-
-                    for( k=0;k<qnt;k++)
-                    {
-                        tmp = Lista_vertice->buscaVertice(v[j])->getVertice()->getArestas()->getraiz();
-                        while(tmp!=NULL)
-                        {
-                            if(v[k] == tmp->getAresta()->getProximo()->getId())
-                                std::cout<<v[j]<<"-->"<<v[k]<<" ";
-                            tmp=tmp->getProximo();
-                        }
-                    }
-                    std::cout<<std::endl;
-                }
-
-            }
-        }
-
-
-
-        void vizinhancaFechada(int id)
-        {
-            if(id<=num_nos&&id>0)
-            {
-                std::cout<<"A vizinhança fechada do nó:"<<id<<" Possui os nós:";
-                NoListaAresta* tmp = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getraiz();
-                int qnt = Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getQuantidade() + 1;
-                int v[qnt],i=1,j,k;
-                v[0]= id;
-                std::cout<<v[0];
-                while(tmp!=NULL)
-                {
-                    v[i]=tmp->getAresta()->getProximo()->getId();
-                    std::cout<<v[i];
-                    tmp=tmp->getProximo();
-                    i++;
-                }
-                std::cout<<std::endl<<"Com as arestas:";
-                for(j=0;j<qnt;j++)
-                {
-
-                    for( k=0;k<qnt;k++)
-                    {
-                        tmp = Lista_vertice->buscaVertice(v[j])->getVertice()->getArestas()->getraiz();
-                        while(tmp!=NULL)
-                        {
-                            if(v[k] == tmp->getAresta()->getProximo()->getId())
-                                std::cout<<v[j]<<"-->"<<v[k]<<" ";
-                            tmp=tmp->getProximo();
-                        }
-                    }
-                    std::cout<<std::endl;
-                }
-
-            }
-        }
-
-        void limpaVert()
-        {
-            NoListaVertice* aux_ver = Lista_vertice->Getraiz();
-            while(aux_ver != NULL){
-                aux_ver->getVertice()->setFlag(0);
-                aux_ver->getProximo();
-            }
-        }
-
-
-    private:
-        bool digrafo;
-        int grau;
-        int ordem;
-        int num_arestas;
-        int num_nos;
-        int gera_id_v;
-        int gera_id_a;
-        ListaVertice * Lista_vertice;
 
 
 };

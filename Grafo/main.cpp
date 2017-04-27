@@ -6,34 +6,44 @@
 using namespace std;
 
 int main(){
-    Grafo *grafo = new Grafo(true);
+
+    /** Variáveis */
+    Grafo * grafo = new Grafo(true);
     string temp;
     float arestemp[3];
 
+
+    /** Tratamento de arquivo e construção do grafo*/
     ifstream file;
-    file.open("name.txt");
+    file.open("grafo.txt");
 
 
-   getline(file, temp);
-   for(int i = 1; i <= atoi(temp.c_str()); i++)
+    getline(file, temp);
+    for(int i = 1; i <= atoi(temp.c_str()); i++)
         grafo->addVertice();
 
-    while(!file.eof())
+    //leitura de arquivo e contrução do grafo
+    while(true)
     {
         file>>arestemp[0]>>arestemp[1]>>arestemp[2];
+        if(file.eof()) break;
 
-
-        //for(int i = 0; i < 3; i++)
-          cout<<arestemp[0]<<arestemp[1]<<arestemp[2]<<endl; //salvar os 3 valores do arquivo no vetor como float
+        cout<<arestemp[0]<<arestemp[1]<<arestemp[2]<<endl; //salvar os 3 valores do arquivo no vetor como float
         grafo->addAresta(arestemp[0], arestemp[1], arestemp[2]);
     }
-
-
     file.close();
+
+
+    /** Testes */
+    cout<<endl;
     grafo->sequenciaGraus();
     cout<<endl;
-    grafo->floyd(4,2);
+    //if(grafo->verificaBipartido()) cout<<"Eh bi";
+    grafo->menorCaminhoFloyd(4,2);
+    grafo->fechoDireto(3);
+    grafo->fechoIndireto(3);
+    cout<<"Eh euleriano? "<<grafo->verificaEuleriano();
 
-    cout<<"COMPILOU \\O/"<<endl;
+
     return 0;
 }

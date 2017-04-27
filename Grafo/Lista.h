@@ -1,9 +1,18 @@
+/** Arquivo de classes gerais */
+/*  As classes nesse arquivo são classes dependentes entre si, por esse motivo se encontram no mesmo arquivo.
+    Além disso, elas são a base para a criação da classe grafo */
+
+//Classes abstraidas da teoria de Grafos.
 class Vertice;
 class Aresta;
+
+//Classes referentes às listas encadeadas de Vertices e Arestas
 class ListaAresta;
 class NoListaAresta;
 class NoListaVertice;
 class ListaVertice;
+
+//Implementações das classes
 
 class NoListaAresta{
 

@@ -2,13 +2,19 @@
 1492546630 source:e:\particular\desenvolvimento\git\grafo\main.cpp
 	<iostream>
 
+1493136574 
+
 1492549040 source:c:\users\gabriel\desktop\grafo\main.cpp
 	<iostream>
 	"ListaAresta.h"
 	"ListaVertice.h"
 
+1492549040 ice.h"
+
 1492549375 c:\users\gabriel\desktop\grafo\listaaresta.h
 	"NoListaAresta.h"
+
+1492549375 esta.h"
 
 1492547245 c:\users\gabriel\desktop\grafo\nolistaaresta.h
 	"Aresta.h"
@@ -18,8 +24,12 @@
 1492547644 c:\users\gabriel\desktop\grafo\listavertice.h
 	"NoListaVertice.h"
 
+1492547644 rtice.h"
+
 1492549009 c:\users\gabriel\desktop\grafo\nolistavertice.h
 	"Vertice.h"
+
+1492549009 "
 
 1492549360 c:\users\gabriel\desktop\grafo\vertice.h
 
@@ -88,4 +98,26 @@
 	"Lista.h"
 
 1493127721 c:\users\hynax\desktop\grafo\lista.h
+
+1493163908 source:/home/medina/Documentos/Grafos-master/Grafo/main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	"Grafo.h"
+
+1493164838 /home/medina/Documentos/Grafos-master/Grafo/Grafo.h
+	"Lista.h"
+
+1493159766 /home/medina/Documentos/Grafos-master/Grafo/Lista.h
+
+1493293781 source:c:\users\hynax\desktop\grafos-master\grafo\main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	"Grafo.h"
+
+1493293658 c:\users\hynax\desktop\grafos-master\grafo\grafo.h
+	"Lista.h"
+
+1493159766 c:\users\hynax\desktop\grafos-master\grafo\lista.h
 
