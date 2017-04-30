@@ -50,5 +50,11 @@ int main(){
     sub->sequenciaGraus();
 
 
+    cout<<endl;
+    Grafo *gcomp = grafo->grafoComplementar(grafo);
+    cout<<endl;
+
+
+
     return 0;
 }

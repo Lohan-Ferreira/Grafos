@@ -1,0 +1,7 @@
+m - Djiskra
+t - para digrafo, apresentar as componentes fortemente conexa
+v - apresentar os nós de articulação
+w - apresentar as arestas ponte
+x - apresentar o raio, diametro, centro e periferia do grafo
+y - apresentar a AGM do grafo ou as florestas de custo mínimo
+z - apresentar as árvores de busca em profundidade e em largura.

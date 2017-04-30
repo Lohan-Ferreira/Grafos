@@ -6,6 +6,9 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 #include "Lista.h"
+#include <iostream>
+
+using namespace std;
 
 class Grafo{
 
@@ -520,6 +523,54 @@ class Grafo{
                 }
 
             }
+        }
+
+        ListaVertice* getListaVertice(){return Lista_vertice;}
+
+        //encontra o grafo complementar
+        Grafo* grafoComplementar(Grafo *grafo){
+            Grafo *gComp = new Grafo(digrafo);
+            bool tinha[gera_id_v-1];
+            NoListaVertice *tmpNo = Lista_vertice->Getraiz();
+            NoListaAresta *tmpAr;
+
+            while(tmpNo != NULL){
+                gComp->addVertice();
+                tmpNo = tmpNo->getProximo();
+            }
+
+            tmpNo = Lista_vertice->Getraiz();
+            while(tmpNo != NULL){
+                for(int i = 0; i < gera_id_v-1; i++) tinha[i] = false;
+                tmpAr = tmpNo->getVertice()->getArestas()->getraiz();
+
+                //Irforma arestas a serem criadas
+                while(tmpAr != NULL){
+                    tinha[(tmpAr->getAresta()->getProximo()->getId())-1] = true;
+                    tmpAr = tmpAr->getProximo();
+                }
+
+                //cria arestas
+                for(int i = 1; i <= gera_id_v-1; i++){
+                    if(tinha[i-1] == false &&                                         //não tinha a aresta
+                       gComp->getListaVertice()->buscaVertice(i) != NULL &&           //existe vertice com o id
+                       gComp->buscaAresta(tmpNo->getVertice()->getId(), i) == NULL && //impede criar 2 vezes quando não digrafo
+                       tmpNo->getVertice()->getId() != i){                            //impede selfloop
+                        gComp->addAresta(tmpNo->getVertice()->getId(), i, 1);
+
+                        //aresta que não tinham no original
+                        cout <<endl;
+                        cout <<tmpNo->getVertice()->getId() << " " << i;
+                    }
+                }
+                tmpNo = tmpNo->getProximo();
+
+
+            }
+            cout<< endl;
+            gComp->sequenciaGraus();
+
+            return gComp;
         }
 
         //limpa os valores das flags nos objetos Vertices
