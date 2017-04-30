@@ -400,14 +400,29 @@ class Grafo{
 
         //Adiciona uma aresta no grafo
         void addAresta(int a , int b, float p)
-        {   Vertice* ant;
+        {
+            Vertice* ant;
             Vertice* prox;
-            ant=Lista_vertice->buscaVertice(a)->getVertice();
-
-            prox=Lista_vertice->buscaVertice(b)->getVertice();
-            ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
-
-            if(grau<verifGrau(a)) grau = verifGrau(a);
+            if(digrafo)
+            {
+                ant=Lista_vertice->buscaVertice(a)->getVertice();
+                prox=Lista_vertice->buscaVertice(b)->getVertice();
+                ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
+                if(grau<verifGrau(a)) grau = verifGrau(a);
+            }
+            else
+            {
+                //add aresta a-->b
+                ant=Lista_vertice->buscaVertice(a)->getVertice();
+                prox=Lista_vertice->buscaVertice(b)->getVertice();
+                ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
+                if(grau<verifGrau(a)) grau = verifGrau(a);
+                //add aresta b-->a
+                ant=Lista_vertice->buscaVertice(b)->getVertice();
+                prox=Lista_vertice->buscaVertice(a)->getVertice();
+                ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
+                if(grau<verifGrau(b)) grau = verifGrau(b);
+            }
         }
 
         //verifica se o grafo é trivial

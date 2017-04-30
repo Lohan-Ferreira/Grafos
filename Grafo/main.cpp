@@ -8,7 +8,7 @@ using namespace std;
 int main(){
 
     /** Variáveis */
-    Grafo * grafo = new Grafo(true);
+    Grafo * grafo = new Grafo(false);
     string temp;
     float arestemp[3];
 
@@ -43,6 +43,7 @@ int main(){
     grafo->fechoDireto(3);
     grafo->fechoIndireto(3);
     cout<<"Eh euleriano? "<<grafo->verificaEuleriano();
+    cout<<"Eh bipartido? "<<grafo->verificaBipartido();
 
 
     return 0;
