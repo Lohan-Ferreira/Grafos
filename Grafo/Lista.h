@@ -54,12 +54,18 @@ class ListaAresta{
         void setQuantidade(int val) { quantidade = val; }
 
         bool addAresta(Aresta *aresta){
-            if(raiz==NULL) raiz = new NoListaAresta(NULL,aresta,NULL);
+            if(raiz==NULL){
+                raiz = new NoListaAresta(NULL,aresta,NULL);
+                quantidade++;
+                return true;
+            }
+            else{
             NoListaAresta *noListaAresta = new NoListaAresta(NULL, aresta, raiz);
             raiz->setAnterior(noListaAresta);
             raiz = noListaAresta;
             quantidade++;
             return true;
+            }
         }
 
         NoListaAresta *buscaAresta(Aresta *aresta){
@@ -94,6 +100,7 @@ class Vertice{
         ListaAresta *getArestas() {return listaAresta;}
         void setFlag(bool b) {flag = b;}
         bool getFlag(){return flag;}
+        void setId(int ID) {id=ID;}
         void setVizitado(bool v){vizitado=v;}
         bool getVizitado(){return vizitado;}
     private:
@@ -164,12 +171,17 @@ class ListaVertice{
         void Setquantidade(int val) { quantidade = val; }
 
         bool addVertice(Vertice *vertice){
-            if(raiz==NULL) raiz = new NoListaVertice(NULL,vertice,NULL);
+            if(raiz==NULL){ raiz = new NoListaVertice(NULL,vertice,NULL);
+            quantidade++;
+            return true;
+            }
+            else{
             NoListaVertice *noListaVertice = new NoListaVertice(NULL, vertice, raiz);
             raiz->setAnterior(noListaVertice);
             raiz = noListaVertice;
             quantidade++;
             return true;
+            }
         }
 
         NoListaVertice *buscaVertice(int id){

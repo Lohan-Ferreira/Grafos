@@ -42,8 +42,12 @@ int main(){
     grafo->menorCaminhoFloyd(4,2);
     grafo->fechoDireto(3);
     grafo->fechoIndireto(3);
-    cout<<"Eh euleriano? "<<grafo->verificaEuleriano();
-    cout<<"Eh bipartido? "<<grafo->verificaBipartido();
+    cout<<"Eh euleriano? "<<grafo->verificaEuleriano()<<endl;
+    cout<<"Eh bipartido? "<<grafo->verificaBipartido()<<endl;
+    int v[3] = {1,3,4};
+    Grafo* sub = grafo->subgrafoInd(v,3);
+    cout<<endl;
+    sub->sequenciaGraus();
 
 
     return 0;

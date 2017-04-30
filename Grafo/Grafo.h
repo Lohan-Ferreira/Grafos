@@ -35,11 +35,11 @@ class Grafo{
         //Retorna o Grau de um Nó com um certo id
         int verifGrau(int id)
         {
-            if(id<=gera_id_v)
+            if(Lista_vertice->buscaVertice(id)!= NULL)
                 return Lista_vertice->buscaVertice(id)->getVertice()->getArestas()->getQuantidade();
             else
             {
-                return 0;
+                return -1;
             }
 
         }
@@ -192,7 +192,7 @@ class Grafo{
 
                 float** geraFloyd()
          {
-             float* matriz[gera_id_v];
+             float** matriz = new float*[gera_id_v];
              for(int i=0;i<gera_id_v;i++)
                 matriz[i]=new float[gera_id_v];
 
@@ -293,6 +293,7 @@ class Grafo{
                 if(iaux != i)
                     troca(vet,iaux,i);
             }
+
         }
 
 
@@ -300,11 +301,16 @@ class Grafo{
         void sequenciaGraus()
         {
             int graus[gera_id_v];
-            for(int i=1;i<gera_id_v;i++)
+            for(int i=0;i<gera_id_v;i++)
                 graus[i]=verifGrau(i);
             sorting(graus,gera_id_v);
-            for(int i=0;i<gera_id_v-1;i++)
-            std::cout<<graus[i];
+            for(int i=0;i<gera_id_v;i++)
+            {
+                if(graus[i]!= -1)
+                    std::cout<<graus[i];
+
+            }
+
         }
 
         bool verificaEuleriano()
@@ -321,6 +327,7 @@ class Grafo{
 
         Aresta* buscaAresta(int a, int b)
         {
+            if(Lista_vertice->buscaVertice(a)==NULL) return NULL;
             NoListaAresta* tmp=Lista_vertice->buscaVertice(a)->getVertice()->getArestas()->getraiz();
             while(tmp!=NULL)
             {
@@ -397,6 +404,8 @@ class Grafo{
             gera_id_v++;
             num_nos++;
         }
+
+
 
         //Adiciona uma aresta no grafo
         void addAresta(int a , int b, float p)
@@ -521,6 +530,61 @@ class Grafo{
                 aux_ver->getVertice()->setFlag(0);
                 aux_ver = aux_ver->getProximo();
             }
+        }
+
+        ListaVertice* getLV(){return Lista_vertice;}
+        int getGera() {return gera_id_v;}
+        void setGera(int gera) {gera_id_v=gera;}
+
+        Grafo* subgrafoInd(int v[],int n)
+        {
+            Grafo *sub = new Grafo(false);
+            for(int i=0;i<n;i++)
+            {
+                if(Lista_vertice->buscaVertice(v[i])!= NULL)
+                {
+
+                    sub->addVertice();
+                    int aux = v[i];
+                    sub->getLV()->Getraiz()->getVertice()->setId(aux);
+                    if(sub->getGera()<=aux) sub->setGera(aux+1);
+
+                }
+
+            }
+
+            /*NoListaVertice* tmp= sub->getLV()->Getraiz();
+            while(tmp!=NULL)
+            {
+                std::cout<<tmp->getVertice()->getId();
+                tmp=tmp->getProximo();
+            }*/
+
+            for(int i=0;i<n-1;i++)
+                for(int j=1;j<n;j++)
+                    if(buscaAresta(v[i],v[j])!= NULL)
+                    {
+
+                        sub->addAresta(v[i],v[j],buscaAresta(v[i],v[j])->getPeso());
+
+                    }
+
+               /* NoListaVertice* tmp=sub->getLV()->Getraiz();
+                NoListaAresta*  tmp2;
+                while(tmp!=NULL)
+                {
+                    tmp2=tmp->getVertice()->getArestas()->getraiz();
+                    while(tmp2!=NULL)
+                    {
+                        std::cout<<tmp2->getAresta()->getAnterior()->getId()<<tmp2->getAresta()->getProximo()->getId()<<std::endl;
+                        tmp2=tmp2->getProximo();
+                    }
+                    tmp=tmp->getProximo();
+                }*/
+
+            return sub;
+
+
         }
 
 
