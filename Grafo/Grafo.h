@@ -32,6 +32,7 @@ class Grafo{
             digrafo = dig;
             gera_id_v=1;
             num_nos=0;
+            num_arestas=0;
         }
         ~Grafo(){}
 
@@ -273,9 +274,20 @@ class Grafo{
 
 
         }
+
         void troca (int* vet, int a, int b)
         {
             int aux = vet[a];
+            vet[a] = vet[b];
+            vet[b] = aux;
+
+        }
+
+
+
+        void trocaArestas(Aresta* vet[], int a, int b)
+        {
+            Aresta* aux = vet[a];
             vet[a] = vet[b];
             vet[b] = aux;
 
@@ -290,7 +302,7 @@ class Grafo{
             {
                 iaux=i;
                 for(j=i+1;j<n;j++){
-                    if(vet[j] <vet[iaux])
+                    if(vet[j] < vet[iaux])
                         iaux=j;
                 }
                 if(iaux != i)
@@ -299,6 +311,22 @@ class Grafo{
 
         }
 
+        void sortingArestas(Aresta* v[], int n)
+        {
+            int iaux, i,j;
+
+            for(i=0;i<n-1;i++)
+            {
+                iaux=i;
+                for(j=i+1;j<n;j++){
+                    if(v[j]->getPeso() < v[iaux]->getPeso())
+                        iaux=j;
+                }
+                if(iaux != i)
+                    trocaArestas(v,iaux,i);
+            }
+
+        }
 
         //Função que imprime todos os graus dos vertives do grafico em ordem crescente
         void sequenciaGraus()
@@ -421,6 +449,7 @@ class Grafo{
                 prox=Lista_vertice->buscaVertice(b)->getVertice();
                 ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
                 if(grau<verifGrau(a)) grau = verifGrau(a);
+                num_arestas++;
             }
             else
             {
@@ -429,11 +458,13 @@ class Grafo{
                 prox=Lista_vertice->buscaVertice(b)->getVertice();
                 ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
                 if(grau<verifGrau(a)) grau = verifGrau(a);
+                num_arestas++;
                 //add aresta b-->a
                 ant=Lista_vertice->buscaVertice(b)->getVertice();
                 prox=Lista_vertice->buscaVertice(a)->getVertice();
                 ant->getArestas()->addAresta(new Aresta(0,p,ant,prox));
                 if(grau<verifGrau(b)) grau = verifGrau(b);
+                num_arestas++;
             }
         }
 
@@ -635,6 +666,77 @@ class Grafo{
 
             return sub;
 
+
+        }
+
+
+        bool existeCaminho(int a, int b)
+        {
+
+            NoListaVertice* ant = Lista_vertice->buscaVertice(a);
+            NoListaAresta* aux;
+            if(ant!=NULL)
+            {
+
+                if(buscaAresta(a,b)!=NULL)
+                {
+                    return true;
+                }
+                else
+                {
+                    ant->getVertice()->setFlag(1);
+                    aux=ant->getVertice()->getArestas()->getraiz();
+                    while(aux!=NULL)
+                    {
+                        //std::cout<<aux->getAresta()->getProximo()->getId()<<"\t";
+                        if(aux->getAresta()->getProximo()->getFlag()==0)
+                        {if(existeCaminho(aux->getAresta()->getProximo()->getId(),b)) return true;}
+                        else aux=aux->getProximo();
+                    }
+                }
+            }
+            return false;
+        }
+
+        Grafo* AGM()
+        {
+            Aresta* arestas[num_arestas];
+            NoListaVertice* aux_ver = Lista_vertice->Getraiz();
+            NoListaAresta* aux_ar;
+            int i=0,contador=0;
+            while(aux_ver!=NULL)
+            {
+                aux_ar=aux_ver->getVertice()->getArestas()->getraiz();
+                while(aux_ar!=NULL)
+                {
+                    arestas[i]=aux_ar->getAresta();
+                    i++;
+                    aux_ar=aux_ar->getProximo();
+                }
+                aux_ver=aux_ver->getProximo();
+            }
+            sortingArestas(arestas,num_arestas);
+
+
+
+            Grafo* agm = new Grafo(false);
+            for(int j=0;j<num_nos;j++)
+                agm->addVertice();
+                std::cout<<"Imprimindo arestas da AGM:";
+                for(int j=0;j<num_arestas&&contador<num_nos-1;j++)
+                {
+                    agm->limpaVert();
+                    if(!agm->existeCaminho(arestas[j]->getAnterior()->getId(),arestas[j]->getProximo()->getId()))
+                    {
+                        std::cout<<arestas[j]->getAnterior()->getId()<<"-->"<<arestas[j]->getProximo()->getId()<<"\t";
+                        agm->addAresta(arestas[j]->getAnterior()->getId(),arestas[j]->getProximo()->getId(),arestas[j]->getPeso());
+                        contador++;
+                    }
+
+                }
+
+
+                return agm;
 
         }
 

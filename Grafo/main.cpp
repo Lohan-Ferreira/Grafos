@@ -53,6 +53,7 @@ int main(){
     cout<<endl;
     Grafo *gcomp = grafo->grafoComplementar(grafo);
     cout<<endl;
+    Grafo* agm = grafo->AGM();
 
 
 

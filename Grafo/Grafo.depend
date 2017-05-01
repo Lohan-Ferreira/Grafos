@@ -110,16 +110,17 @@
 
 1493159766 /home/medina/Documentos/Grafos-master/Grafo/Lista.h
 
-1493573015 source:c:\users\hynax\desktop\grafos-master\grafo\main.cpp
+1493634637 source:c:\users\hynax\desktop\grafos-master\grafo\main.cpp
 	<iostream>
 	<fstream>
 	<stdlib.h>
 	"Grafo.h"
 
-1493573659 c:\users\hynax\desktop\grafos-master\grafo\grafo.h
+1493639962 c:\users\hynax\desktop\grafos-master\grafo\grafo.h
 	"Lista.h"
+	<iostream>
 
-1493571454 c:\users\hynax\desktop\grafos-master\grafo\lista.h
+1493569100 c:\users\hynax\desktop\grafos-master\grafo\lista.h
 
 1493583382 source:c:\users\gabriel\desktop\grafos\grafo\main.cpp
 	<iostream>
