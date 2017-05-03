@@ -739,7 +739,25 @@ class Grafo{
                 return agm;
 
         }
-
+        void verPontes ()
+        {
+            NoListaVertice* aux_ver = Lista_vertice->Getraiz();
+            while(aux_ver != NULL){
+                NoListaAresta *aux_Pro,*aux_ar = aux_ver->getVertice()->getArestas()->getraiz();
+                while(aux_ar != NULL){
+                    aux_Pro = aux_ar->getProximo();
+                    Vertice *aux_ver2 = aux_ar->getAresta()->getProximo();
+                    Aresta ar = *aux_ar->getAresta();
+                    aux_ver->getVertice()->getArestas()->deletaAresta(aux_ar->getAresta());
+                    if (!existeCaminho(aux_ver->getVertice()->getId(),aux_ver2->getId())){
+                        std::cout<<"E ponte a aresta entre os nos"<<aux_ver->getVertice()->getId()<<"e"<<aux_ver2->getId()<<endl;
+                        }
+                    aux_ver->getVertice()->getArestas()->addAresta(&ar);
+                    aux_ar = aux_Pro;
+                }
+                aux_ver = aux_ver->getProximo();
+            }
+        }
 
 
 
