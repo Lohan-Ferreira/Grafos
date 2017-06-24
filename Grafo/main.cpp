@@ -11,11 +11,12 @@ int main(){
     Grafo * grafo = new Grafo(false);
     string temp;
     float arestemp[3];
+    int no;
 
 
     /** Tratamento de arquivo e construção do grafo*/
     ifstream file;
-    file.open("grafo.txt");
+    file.open("b01g.txt");
 
 
     getline(file, temp);
@@ -28,14 +29,21 @@ int main(){
         file>>arestemp[0]>>arestemp[1]>>arestemp[2];
         if(file.eof()) break;
 
-        cout<<arestemp[0]<<arestemp[1]<<arestemp[2]<<endl; //salvar os 3 valores do arquivo no vetor como float
+        //cout<<arestemp[0]<<arestemp[1]<<arestemp[2]<<endl; //salvar os 3 valores do arquivo no vetor como float
         grafo->addAresta(arestemp[0], arestemp[1], arestemp[2]);
     }
     file.close();
 
+    file.open("b01t.txt");
+    while(!file.eof())
+    {
+        file>>no;
+        grafo->setSteiner(no);
+    }
+    grafo->gulosoSteiner();
 
     /** Testes */
-    cout<<endl;
+    /*cout<<endl;
     grafo->sequenciaGraus();
     cout<<endl;
     //if(grafo->verificaBipartido()) cout<<"Eh bi";
@@ -53,7 +61,7 @@ int main(){
     cout<<endl;
     Grafo *gcomp = grafo->grafoComplementar(grafo);
     cout<<endl;
-    Grafo* agm = grafo->AGM();
+    Grafo* agm = grafo->AGM();*/
 
 
 

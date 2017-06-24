@@ -134,3 +134,15 @@
 
 1493583087 c:\users\gabriel\desktop\grafos\grafo\lista.h
 
+1498345065 source:c:\users\coelho\desktop\grafos-master\grafo\main.cpp
+	<iostream>
+	<fstream>
+	<stdlib.h>
+	"Grafo.h"
+
+1498348792 c:\users\coelho\desktop\grafos-master\grafo\grafo.h
+	"Lista.h"
+	<iostream>
+
+1498348353 c:\users\coelho\desktop\grafos-master\grafo\lista.h
+

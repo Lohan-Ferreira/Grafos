@@ -95,6 +95,7 @@ class Vertice{
             flag=f1;
             flag2=f2;
             listaAresta = new ListaAresta();
+            steiner=false;
             }
         int getId(){return id;}
         ListaAresta *getArestas() {return listaAresta;}
@@ -103,6 +104,8 @@ class Vertice{
         void setId(int ID) {id=ID;}
         void setVizitado(bool v){vizitado=v;}
         bool getVizitado(){return vizitado;}
+        bool getSteiner(){return steiner;}
+        void setSteiner() {steiner=true;}
     private:
         int id;
         float peso;
@@ -110,6 +113,7 @@ class Vertice{
         char flag2;
         bool vizitado;
         ListaAresta *listaAresta;
+        bool steiner;
 
 };
 class Aresta{
