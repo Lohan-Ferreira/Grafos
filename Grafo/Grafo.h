@@ -36,6 +36,7 @@ public:
         gera_id_v=1;
         num_nos=0;
         num_arestas=0;
+        num_terminais=0;
     }
     ~Grafo() {}
 
@@ -341,7 +342,7 @@ public:
         int* graus = new int[gera_id_v];
         for(int i=0; i<gera_id_v; i++)
             graus[i]=verifGrau(i);
-        sorting(graus,gera_id_v);
+        //sorting(graus,gera_id_v);
         for(int i=0; i<gera_id_v; i++)
         {
             if(graus[i]!= -1)
@@ -822,7 +823,11 @@ public:
 
     bool removeAresta(int a, int b)
     {
+
+
+
         Lista_vertice->buscaVertice(a)->getVertice()->getArestas()->deletaAresta(buscaAresta(a,b));
+
         Lista_vertice->buscaVertice(b)->getVertice()->getArestas()->deletaAresta(buscaAresta(b,a));
         return true;
     }
@@ -830,6 +835,8 @@ public:
     void setSteiner(int id)
     {
         Lista_vertice->buscaVertice(id)->getVertice()->setSteiner();
+        num_terminais++;
+
     }
 
     Grafo* gulosoSteiner()
@@ -854,9 +861,12 @@ public:
                 while(tmp2!=NULL)
                 {
                     //vcandidatos->addAresta(tmp2->getAresta());
+                    if(tmp2->getAresta()!=NULL)
+                    {
                     candidatos[cont_arestas]=tmp2->getAresta();
-                    tmp2=tmp2->getProximo();
                     cont_arestas++;
+                    }
+                    tmp2=tmp2->getProximo();
 
                 }
 
@@ -866,22 +876,22 @@ public:
         int id_terminal = solVertices->Getraiz()->getVertice()->getId();
         cout<<"AQUI";
 
-        while(!ehSolucao(id_terminal,0,num_terminais))
+
+        limpaVert();
+        while(!solucao->ehSolucao(id_terminal,0,num_terminais)&&cont_arestas>=0)
         {
-
+            limpaVert();
             sortingArestas(candidatos,cont_arestas);
-                cout<<"AQUI2";
-                candidatos[0];
-                cout<<"CADE ";
+            solucao->addAresta(candidatos[0]->getAnterior()->getId(),candidatos[0]->getProximo()->getId(),candidatos[0]->getPeso());
+            cout<<candidatos[0]->getAnterior()->getId()<<"---->"<<candidatos[0]->getProximo()->getId();
 
-            //solucao->addAresta(candidatos[0]->getAnterior(),candidatos[0]->getProximo(),candidatos[0]->getPeso());
             if(solVertices->buscaVertice(candidatos[0]->getProximo()->getId())== NULL)
             {
                 cout<<"AQUI3";
                 solVertices->addVertice(candidatos[0]->getProximo());
 
                 //cout<<candidatos[0]->getAnterior()->getId()<<" "<<candidatos[0]->getProximo()->getId()<<" "<<candidatos[0]->getPeso();
-                solucao->addAresta(candidatos[0]->getAnterior()->getId(),candidatos[0]->getProximo()->getId(),candidatos[0]->getPeso());
+                //solucao->addAresta(candidatos[0]->getAnterior()->getId(),candidatos[0]->getProximo()->getId(),candidatos[0]->getPeso());
 
                 solAresta->addAresta(buscaAresta(candidatos[0]->getAnterior()->getId(),candidatos[0]->getProximo()->getId()));
                 tmp2=candidatos[0]->getProximo()->getArestas()->getraiz();
@@ -889,41 +899,75 @@ public:
 
                 while(tmp2!=NULL)
                 {
+                    if(tmp2->getAresta()!=NULL)
+                    {
                     candidatos[cont_arestas]=tmp2->getAresta();
+
+
                     cont_arestas++;
+                    }
                     tmp2=tmp2->getProximo();
                 }
 
             }
+            cout<<"\t"<<cont_arestas<<" ";
             candidatos[0]=candidatos[cont_arestas-1];
             cont_arestas--;
 
+
         }
+
+        tmp=solucao->getLV()->Getraiz();
+         while(tmp!=NULL)
+         {
+             tmp2=tmp->getVertice()->getArestas()->getraiz();
+             while(tmp2!=NULL)
+             {
+                 std::cout<<tmp2->getAresta()->getAnterior()->getId()<<"-->"<<tmp2->getAresta()->getProximo()->getId()<<std::endl;
+                 tmp2=tmp2->getProximo();
+             }
+             tmp=tmp->getProximo();
+         }
+
 
 
         bool grau1 = false;
         int* v = solucao->sequenciaGraus();
+        cout<<endl;
         int no1;
         for(int i=0; i<num_nos; i++)
         {
-            if(v[i]==1&&!solucao->getListaVertice()->buscaVertice(i)->getVertice()->getSteiner()) grau1 = true;
+            if(v[i]==1 && !Lista_vertice->buscaVertice(i)->getVertice()->getSteiner())
+            {
+            grau1 = true;
             no1=i;
             break;
+            }
         }
         while(grau1)
         {
             grau1=false;
+            cout<<"CC";
             int no2 = solucao->getListaVertice()->buscaVertice(no1)->getVertice()->getArestas()->getraiz()->getAresta()->getProximo()->getId();
+            cout<<"AA";
             solucao->removeAresta(no1,no2);
-            solucao->removeAresta(no2,no1);
+            cout<<"BB";
+            //solucao->removeAresta(no2,no1);
             solAresta->deletaAresta(buscaAresta(no1,no2));
+
             v = solucao->sequenciaGraus();
+            cout<<endl;
             for(int i=0; i<num_nos; i++)
+            {
+
+                if(v[i]==1&&!solucao->getListaVertice()->buscaVertice(i)->getVertice()->getSteiner())
                 {
-                if(v[i]==1&&!solucao->getListaVertice()->buscaVertice(i)->getVertice()->getSteiner()) grau1 = true;
-                no1=i;
-                break;
+
+                    grau1 = true;
+                    no1=i;
+                    break;
                 }
+            }
 
         }
 
@@ -934,7 +978,10 @@ public:
             soma+=tmp2->getAresta()->getPeso();
             tmp2=tmp2->getProximo();
         }
-        cout<<soma;
+        cout<<soma/2<<endl;
+
+
+
         return solucao;
 
 

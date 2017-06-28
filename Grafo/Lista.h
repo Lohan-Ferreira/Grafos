@@ -81,8 +81,23 @@ class ListaAresta{
         bool deletaAresta(Aresta *aresta){
             NoListaAresta *tmp = buscaAresta(aresta);
             if(tmp == NULL) return false;
+            if(tmp->getAnterior()!=NULL)
+            {
+
             tmp->getAnterior()->setProximo(tmp->getProximo());
+            }
+            if(tmp->getProximo()!= NULL)
+            {
             tmp->getProximo()->setAnterior(tmp->getAnterior());
+
+            }
+            if(tmp->getAnterior()==NULL && tmp->getProximo()==NULL)
+            {
+                raiz=NULL;
+
+            }
+            quantidade--;
+            delete tmp;
             return true;
         }
 

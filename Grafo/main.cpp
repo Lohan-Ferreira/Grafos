@@ -16,7 +16,7 @@ int main(){
 
     /** Tratamento de arquivo e construção do grafo*/
     ifstream file;
-    file.open("b01g.txt");
+    file.open("grafo.txt");
 
 
     getline(file, temp);
@@ -34,7 +34,7 @@ int main(){
     }
     file.close();
 
-    file.open("b01t.txt");
+    file.open("steiner.txt");
     while(!file.eof())
     {
         file>>no;
