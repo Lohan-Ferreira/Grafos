@@ -7,6 +7,9 @@
 #define GRAFO_H
 #include "Lista.h"
 #include <iostream>
+#define BLOCO_ITER 100
+#include <time.h>
+#include <math.h>
 
 using namespace std;
 
@@ -39,6 +42,47 @@ public:
         num_terminais=0;
     }
     ~Grafo() {}
+
+float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room){
+	int melhorValor = 9999999999999999999, valor_qualquer;
+	int temp_sorteio;
+	float sorteio, sum_q;
+	float soma_alpha[tam_alpha],
+		  probabilidades[tam_alpha],
+		  enne[tam_alpha],
+		  temp_temp[tam_alpha];
+
+	for(int i = 0; i < tam_alpha; i++){
+		probabilidades[i] = 1/tam_alpha;
+		soma_alpha[i] = 0;
+		enne[i] = 0;
+	}
+
+    srand(time(NULL));
+	for(int i = 0; i < max_iter; i++){
+		sorteio = (rand()%1000)/1000;
+		temp_sorteio = 0;
+		while(true){
+			if(sorteio > probabilidades[temp_sorteio]) sorteio -= probabilidades[temp_sorteio];
+			else break;
+			temp_sorteio++;
+		}
+		enne[temp_sorteio]++;
+//		valor_qualquer = randomizado(Grafo, alphas[temp_sorteio], max_iter_rand);
+
+		if(valor_qualquer < melhorValor) melhorValor = valor_qualquer;
+
+		if(i%BLOCO_ITER == 0){
+			sum_q = 0;
+			for(int k = 0; k < tam_alpha; k++) temp_temp[k] = pow(melhorValor/(soma_alpha[k]/enne[k]), room);
+			for(int k = 0; k < tam_alpha; k++) sum_q += temp_temp[k];
+			for(int k = 0; k < tam_alpha; k++) probabilidades[k] = temp_temp[k]/sum_q;
+
+		}
+	}
+
+	return melhorValor;
+}
 
     //Retorna o Grau de um Nó com um certo id
     int verifGrau(int id)
