@@ -863,6 +863,7 @@ public:
         int marcadores[gera_id_v] = {0};
         int terminais[num_terminais];
         int c = 0,marcaAnt,marcaProx;
+
         //ListaAresta* vcandidatos = new ListaAresta();
         NoListaVertice* tmp = Lista_vertice->Getraiz();
         NoListaAresta* tmp2;
@@ -992,7 +993,7 @@ public:
 
         }
 
-
+        float soma=0.0;
         tmp=solucao->getLV()->Getraiz();
          while(tmp!=NULL)
          {
@@ -1000,21 +1001,15 @@ public:
              while(tmp2!=NULL)
              {
                  std::cout<<tmp2->getAresta()->getAnterior()->getId()<<"-->"<<tmp2->getAresta()->getProximo()->getId()<<std::endl;
+                 soma+=tmp2->getAresta()->getPeso();
                  tmp2=tmp2->getProximo();
              }
              tmp=tmp->getProximo();
          }
-       /* float soma = 0;
-        tmp2 = solAresta->getraiz();
-        while(tmp2 != NULL)
-        {
-            soma+=tmp2->getAresta()->getPeso();
-            tmp2=tmp2->getProximo();
-        }
-        cout<<soma/2<<endl;*/
 
 
 
+        cout<<soma/2;
         return solucao;
 
 
