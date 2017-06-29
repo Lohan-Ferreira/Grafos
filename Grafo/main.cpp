@@ -16,7 +16,7 @@ int main(){
 
     /** Tratamento de arquivo e construção do grafo*/
     ifstream file;
-    file.open("grafo.txt");
+    file.open("b01g.txt");
 
 
     getline(file, temp);
@@ -33,12 +33,14 @@ int main(){
         grafo->addAresta(arestemp[0], arestemp[1], arestemp[2]);
     }
     file.close();
-
-    file.open("steiner.txt");
+int c=0;
+    file.open("b01t.txt");
     while(!file.eof())
     {
         file>>no;
         grafo->setSteiner(no);
+        c++;
+        cout<<c<<endl;
     }
     grafo->gulosoSteiner();
 
