@@ -43,47 +43,6 @@ public:
     }
     ~Grafo() {}
 
-float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room){
-	int melhorValor = 9999999999999999999, valor_qualquer;
-	int temp_sorteio;
-	float sorteio, sum_q;
-	float soma_alpha[tam_alpha],
-		  probabilidades[tam_alpha],
-		  enne[tam_alpha],
-		  temp_temp[tam_alpha];
-
-	for(int i = 0; i < tam_alpha; i++){
-		probabilidades[i] = 1/tam_alpha;
-		soma_alpha[i] = 0;
-		enne[i] = 0;
-	}
-
-    srand(time(NULL));
-	for(int i = 0; i < max_iter; i++){
-		sorteio = (rand()%1000)/1000;
-		temp_sorteio = 0;
-		while(true){
-			if(sorteio > probabilidades[temp_sorteio]) sorteio -= probabilidades[temp_sorteio];
-			else break;
-			temp_sorteio++;
-		}
-		enne[temp_sorteio]++;
-//		valor_qualquer = randomizado(Grafo, alphas[temp_sorteio], max_iter_rand);
-
-		if(valor_qualquer < melhorValor) melhorValor = valor_qualquer;
-
-		if(i%BLOCO_ITER == 0){
-			sum_q = 0;
-			for(int k = 0; k < tam_alpha; k++) temp_temp[k] = pow(melhorValor/(soma_alpha[k]/enne[k]), room);
-			for(int k = 0; k < tam_alpha; k++) sum_q += temp_temp[k];
-			for(int k = 0; k < tam_alpha; k++) probabilidades[k] = temp_temp[k]/sum_q;
-
-		}
-	}
-
-	return melhorValor;
-}
-
     //Retorna o Grau de um Nó com um certo id
     int verifGrau(int id)
     {
@@ -231,15 +190,15 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
         std::cout<<"-->"<<b<<std::endl;
 
 
-        /*IMPRIME TODA A MATRIZ!!
-         for(int i=1;i<gera_id_v;i++)
+       // IMPRIME TODA A MATRIZ!!
+         /*for(int i=1;i<gera_id_v;i++)
          {
              for(int j=1;j<gera_id_v;j++)
-                std::cout<<matriz[i][j]<<"\t";
+                std::cout<<(int)matriz[i][j]/1000<<" ";
              std::cout<<std::endl;
-         }
+         }*/
 
-        */
+
     }
 
     //função auxiliar para swap em um ponteiro
@@ -866,18 +825,22 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
     }*/
 
 
-    verificaSteiner(int marcadores[], int terminais[],int num_terminais)
+bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
     {
+
         for(int i=0;i<num_terminais-1;i++)
         {
-                cout<<"HA"<<marcadores[terminais[i]]<<" "<<marcadores[terminais[i+1]]<<"HE"<<endl;
+
             if(marcadores[terminais[i]]!= marcadores[terminais[i+1]])
             {
 
                 return false;
             }
         }
+
+
         return true;
+
     }
 
     bool removeAresta(int a, int b)
@@ -932,6 +895,7 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
                 }
 
             }
+
             tmp=tmp->getProximo();
         }
 
@@ -942,13 +906,15 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
         cout<<num_terminais;
         while(!verificaSteiner(marcadores,terminais,num_terminais)&&cont_arestas>=0)
         {
-            cout<<"HAb";
+
             sortingArestas(candidatos,cont_arestas);
             marcaAnt=marcadores[candidatos[0]->getAnterior()->getId()];
             marcaProx=marcadores[candidatos[0]->getProximo()->getId()];
 
+
             if(marcaAnt>marcaProx)
                 {
+
                     solucao->addAresta(candidatos[0]->getAnterior()->getId(),candidatos[0]->getProximo()->getId(),candidatos[0]->getPeso());
                     if(marcaProx==0)marcadores[candidatos[0]->getProximo()->getId()]= marcaAnt;
                     else
@@ -983,20 +949,15 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
 
 
 
-        tmp=solucao->getLV()->Getraiz();
-         while(tmp!=NULL)
-         {
-             tmp2=tmp->getVertice()->getArestas()->getraiz();
-             while(tmp2!=NULL)
-             {
-                 std::cout<<tmp2->getAresta()->getAnterior()->getId()<<"-->"<<tmp2->getAresta()->getProximo()->getId()<<std::endl;
-                 tmp2=tmp2->getProximo();
-             }
-             tmp=tmp->getProximo();
-         }
 
 
+            for(int i=0;i<num_terminais;i++)
+            {
 
+                solucao->limpaVert();
+            if(!solucao->existeCaminho(terminais[0],terminais[i])) cout << "SOLUCAO INVALIDA!!"<<endl;
+            else cout<<"Existe:"<<terminais[0]<<"<-->"<<terminais[i]<<endl;
+            }
 
 
         bool grau1 = false;
@@ -1051,6 +1012,13 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
              tmp=tmp->getProximo();
          }
 
+            for(int i=0;i<num_terminais;i++)
+            {
+
+                solucao->limpaVert();
+            if(!solucao->existeCaminho(terminais[0],terminais[i])) cout << "SOLUCAO INVALIDA!!";
+            }
+
 
 
         cout<<soma/2;
@@ -1058,6 +1026,48 @@ float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, i
 
 
     }
+
+
+    float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room){
+	int melhorValor = 9999999999999999999, valor_qualquer;
+	int temp_sorteio;
+	float sorteio, sum_q;
+	float soma_alpha[tam_alpha],
+		  probabilidades[tam_alpha],
+		  enne[tam_alpha],
+		  temp_temp[tam_alpha];
+
+	for(int i = 0; i < tam_alpha; i++){
+		probabilidades[i] = 1/tam_alpha;
+		soma_alpha[i] = 0;
+		enne[i] = 0;
+	}
+
+    srand(time(NULL));
+	for(int i = 0; i < max_iter; i++){
+		sorteio = (rand()%1000)/1000;
+		temp_sorteio = 0;
+		while(true){
+			if(sorteio > probabilidades[temp_sorteio]) sorteio -= probabilidades[temp_sorteio];
+			else break;
+			temp_sorteio++;
+		}
+		enne[temp_sorteio]++;
+//		valor_qualquer = randomizado(Grafo, alphas[temp_sorteio], max_iter_rand);
+
+		if(valor_qualquer < melhorValor) melhorValor = valor_qualquer;
+
+		if(i%BLOCO_ITER == 0){
+			sum_q = 0;
+			for(int k = 0; k < tam_alpha; k++) temp_temp[k] = pow(melhorValor/(soma_alpha[k]/enne[k]), room);
+			for(int k = 0; k < tam_alpha; k++) sum_q += temp_temp[k];
+			for(int k = 0; k < tam_alpha; k++) probabilidades[k] = temp_temp[k]/sum_q;
+
+		}
+	}
+
+	return melhorValor;
+}
 
 
 

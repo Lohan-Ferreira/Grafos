@@ -16,7 +16,7 @@ int main(){
 
     /** Tratamento de arquivo e construção do grafo*/
     ifstream file;
-    file.open("b01g.txt");
+    file.open("ins80g.txt");
 
 
     getline(file, temp);
@@ -34,7 +34,7 @@ int main(){
     }
     file.close();
 int c=0;
-    file.open("b01t.txt");
+    file.open("ins80t.txt");
     while(!file.eof())
     {
         file>>no;
