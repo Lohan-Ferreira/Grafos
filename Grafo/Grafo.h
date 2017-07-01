@@ -7,9 +7,10 @@
 #define GRAFO_H
 #include "Lista.h"
 #include <iostream>
-#define BLOCO_ITER 100
+#define BLOCO_ITER 50
 #include <time.h>
 #include <math.h>
+#include <fstream>
 
 using namespace std;
 
@@ -348,8 +349,8 @@ public:
         //sorting(graus,gera_id_v);
         for(int i=0; i<gera_id_v; i++)
         {
-            if(graus[i]!= -1)
-                std::cout<<graus[i];
+            if(graus[i]!= -1);
+              //  std::cout<<graus[i]; /* Remova o comentario dessa linha para imprimir na tela a sequencia de graus!*/
 
         }
 
@@ -860,17 +861,34 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
     }
 
-    Grafo* gulosoSteiner()
+    float gulosoRandSteiner(float alfa,int num_iteracoes)
     {
-        Grafo* solucao = new Grafo(false);
-        for(int i=1; i<=num_nos; i++)
-            solucao->addVertice();
+        srand(time(NULL));
+        int sorteado;
+        Grafo* solucao;
+        float melhor_solucao = 9999999999;
+        float soma;
+
         Aresta* candidatos[num_arestas];
         int cont_arestas=0;
         int marcadores[gera_id_v] = {0};
         int terminais[num_terminais];
-        int c = 0,marcaAnt,marcaProx;
+        int c,marcaAnt,marcaProx;
 
+
+       // cout<<"alfa da vez:"<<alfa;
+
+        for(int iteracao=0;iteracao<num_iteracoes;iteracao++)
+        {
+
+            solucao = new Grafo(false);
+            c=0;
+            cont_arestas=0;
+            for(int i=0;i<gera_id_v;i++)marcadores[i]=0;
+
+
+            for(int i=1; i<=num_nos; i++)
+            solucao->addVertice();
         //ListaAresta* vcandidatos = new ListaAresta();
         NoListaVertice* tmp = Lista_vertice->Getraiz();
         NoListaAresta* tmp2;
@@ -903,29 +921,32 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
         cout<<"AQUI";*/
 
 
-        cout<<num_terminais;
+
         while(!verificaSteiner(marcadores,terminais,num_terminais)&&cont_arestas>=0)
         {
 
             sortingArestas(candidatos,cont_arestas);
-            marcaAnt=marcadores[candidatos[0]->getAnterior()->getId()];
-            marcaProx=marcadores[candidatos[0]->getProximo()->getId()];
+            if(alfa != 0)
+            sorteado=rand()%(int)(cont_arestas*alfa+1);
+            else sorteado =0;
+            marcaAnt=marcadores[candidatos[sorteado]->getAnterior()->getId()];
+            marcaProx=marcadores[candidatos[sorteado]->getProximo()->getId()];
 
 
             if(marcaAnt>marcaProx)
                 {
 
-                    solucao->addAresta(candidatos[0]->getAnterior()->getId(),candidatos[0]->getProximo()->getId(),candidatos[0]->getPeso());
-                    if(marcaProx==0)marcadores[candidatos[0]->getProximo()->getId()]= marcaAnt;
+                    solucao->addAresta(candidatos[sorteado]->getAnterior()->getId(),candidatos[sorteado]->getProximo()->getId(),candidatos[sorteado]->getPeso());
+                    if(marcaProx==0)marcadores[candidatos[sorteado]->getProximo()->getId()]= marcaAnt;
                     else
                     {
                         for(int i=1;i<gera_id_v;i++)
                             if(marcadores[i]==marcaProx)marcadores[i]=marcaAnt;
                     }
 
-                cout<<candidatos[0]->getAnterior()->getId()<<"---->"<<candidatos[0]->getProximo()->getId();
 
-                tmp2=candidatos[0]->getProximo()->getArestas()->getraiz();
+
+                tmp2=candidatos[sorteado]->getProximo()->getArestas()->getraiz();
 
 
                     while(tmp2!=NULL)
@@ -942,8 +963,8 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
                 }
 
 
-            cout<<"\t"<<cont_arestas<<" ";
-            candidatos[0]=candidatos[cont_arestas-1];
+
+            candidatos[sorteado]=candidatos[cont_arestas-1];
             cont_arestas--;
         }
 
@@ -956,19 +977,17 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
                 solucao->limpaVert();
             if(!solucao->existeCaminho(terminais[0],terminais[i])) cout << "SOLUCAO INVALIDA!!"<<endl;
-            else cout<<"Existe:"<<terminais[0]<<"<-->"<<terminais[i]<<endl;
             }
 
 
         bool grau1 = false;
         int* v = solucao->sequenciaGraus();
-        cout<<endl;
         int no1;
         for(int i=0; i<gera_id_v; i++)
         {
             if(v[i]==1 && !Lista_vertice->buscaVertice(i)->getVertice()->getSteiner())
             {
-                cout<<"ESSE AQUI:"<<i<<endl;
+
             grau1 = true;
             no1=i;
             break;
@@ -980,16 +999,15 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
             int no2 = solucao->getListaVertice()->buscaVertice(no1)->getVertice()->getArestas()->getraiz()->getAresta()->getProximo()->getId();
 
             solucao->removeAresta(no1,no2);
-            cout<<"removido:"<<no1<<"-->"<<no2<<endl;
+
             //solucao->removeAresta(no2,no1);
             v = solucao->sequenciaGraus();
-            cout<<endl;
             for(int i=0; i<gera_id_v; i++)
             {
 
                 if(v[i]==1&&!Lista_vertice->buscaVertice(i)->getVertice()->getSteiner())
                 {
-                    cout<<"ESSE AQUI:"<<i<<endl;
+
                     grau1 = true;
                     no1=i;
                     break;
@@ -998,14 +1016,13 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
         }
 
-        float soma=0.0;
+         soma=0.0;
         tmp=solucao->getLV()->Getraiz();
          while(tmp!=NULL)
          {
              tmp2=tmp->getVertice()->getArestas()->getraiz();
              while(tmp2!=NULL)
              {
-                 std::cout<<tmp2->getAresta()->getAnterior()->getId()<<"-->"<<tmp2->getAresta()->getProximo()->getId()<<std::endl;
                  soma+=tmp2->getAresta()->getPeso();
                  tmp2=tmp2->getProximo();
              }
@@ -1019,53 +1036,93 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
             if(!solucao->existeCaminho(terminais[0],terminais[i])) cout << "SOLUCAO INVALIDA!!";
             }
 
+            soma=soma/2;
+           // cout<<"soma parcial:"<<soma<<endl;
+            if(soma<melhor_solucao) melhor_solucao=soma;
+
+            delete solucao;
+        }
 
 
-        cout<<soma/2;
-        return solucao;
+     //   cout<<"melhor rand:"<<melhor_solucao<<endl;
+        return melhor_solucao;
 
 
     }
 
 
-    float reativo(Grafo* grafo , float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room){
-	int melhorValor = 9999999999999999999, valor_qualquer;
+    float reativo(float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room){
+    string nameFile = "arquivoSaida.csv";
+    string blockFile = "arquivoSaidaBloco.csv";
+	int melhorValor = 9999999, valor_qualquer;
 	int temp_sorteio;
 	float sorteio, sum_q;
 	float soma_alpha[tam_alpha],
 		  probabilidades[tam_alpha],
 		  enne[tam_alpha],
 		  temp_temp[tam_alpha];
+    ofstream file,bfile;
+    file.open(nameFile.c_str(), ios::ate);
+    bfile.open(blockFile.c_str(), ios::ate);
 
 	for(int i = 0; i < tam_alpha; i++){
-		probabilidades[i] = 1/tam_alpha;
+		probabilidades[i] = 1/(float)tam_alpha;
 		soma_alpha[i] = 0;
-		enne[i] = 0;
+		enne[i] = 1;
 	}
 
+	for(int i=0;i<10;i++)
+    {
+        time_t tempo1 = clock();
+        soma_alpha[i]=gulosoRandSteiner(alphas[i],max_iter_rand);
+        time_t tempo2 = clock();
+        file << soma_alpha[i]<< ";" << alphas[i] <<";"<< (tempo2 - tempo1)  <<endl;
+        if(soma_alpha[i]<melhorValor) melhorValor = soma_alpha[i];
+    }
+
     srand(time(NULL));
-	for(int i = 0; i < max_iter; i++){
-		sorteio = (rand()%1000)/1000;
+
+	for(int i = 10; i < max_iter; i++){
+
+		sorteio = (rand()%1000)/1000.0;
+		//cout<<"\t"<<sorteio<<endl;
 		temp_sorteio = 0;
 		while(true){
-			if(sorteio > probabilidades[temp_sorteio]) sorteio -= probabilidades[temp_sorteio];
-			else break;
+			if(sorteio > probabilidades[temp_sorteio]){ sorteio -= probabilidades[temp_sorteio];}
+			else {break;}
 			temp_sorteio++;
 		}
 		enne[temp_sorteio]++;
-//		valor_qualquer = randomizado(Grafo, alphas[temp_sorteio], max_iter_rand);
+		//cout<<"\t"<<probabilidades[temp_sorteio]<<endl;
+		time_t tempo1 = clock();
+		valor_qualquer = gulosoRandSteiner(alphas[temp_sorteio], max_iter_rand);
+		time_t tempo2 = clock();
+
+		file << valor_qualquer << ";" << alphas[temp_sorteio] <<";"<< (tempo2 - tempo1) <<endl;
+		soma_alpha[temp_sorteio]+=valor_qualquer;
 
 		if(valor_qualquer < melhorValor) melhorValor = valor_qualquer;
 
-		if(i%BLOCO_ITER == 0){
+		if((i+1)%BLOCO_ITER == 0){
 			sum_q = 0;
 			for(int k = 0; k < tam_alpha; k++) temp_temp[k] = pow(melhorValor/(soma_alpha[k]/enne[k]), room);
 			for(int k = 0; k < tam_alpha; k++) sum_q += temp_temp[k];
 			for(int k = 0; k < tam_alpha; k++) probabilidades[k] = temp_temp[k]/sum_q;
 
+			for(int i=0;i<10;i++)
+            {
+                bfile<<probabilidades[i]<<";"<<soma_alpha[i]/enne[i]<<";"<<enne[i]<<";";
+
+            }
+            bfile<<endl;
+
+
+
+
 		}
 	}
-
+	file << melhorValor;
+    cout<<endl<<endl<<melhorValor;
 	return melhorValor;
 }
 

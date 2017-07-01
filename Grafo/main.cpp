@@ -2,6 +2,9 @@
 #include <fstream>
 #include <stdlib.h>
 #include "Grafo.h"
+#define max_iter 1000
+#define max_iter_rand 100
+#define room 10
 
 using namespace std;
 
@@ -12,6 +15,8 @@ int main(){
     string temp;
     float arestemp[3];
     int no;
+    float alfa_reativo[10]={0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5};
+    float alfa_randomizado[4]={0.05,0.1,0.15,0.2};
 
 
     /** Tratamento de arquivo e construção do grafo*/
@@ -40,9 +45,9 @@ int c=0;
         file>>no;
         grafo->setSteiner(no);
         c++;
-        cout<<c<<endl;
     }
-    grafo->gulosoSteiner();
+    grafo->reativo(alfa_reativo,10,max_iter_rand,max_iter,10);
+   // grafo->gulosoRandSteiner(0.05,10000);
 
     /** Testes */
     /*cout<<endl;
