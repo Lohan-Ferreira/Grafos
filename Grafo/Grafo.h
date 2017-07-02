@@ -994,14 +994,6 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
 
 
-            for(int i=0;i<num_terminais;i++)
-            {
-
-                solucao->limpaVert();
-            if(!solucao->existeCaminho(terminais[0],terminais[i])) cout << "SOLUCAO INVALIDA!!"<<endl;
-            }
-
-
         bool grau1 = false;
         int* v = solucao->sequenciaGraus();
         int no1;
@@ -1015,6 +1007,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
             break;
             }
         }
+        delete v;
         while(grau1)
         {
             grau1=false;
@@ -1035,6 +1028,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
                     break;
                 }
             }
+            delete v;
 
         }
 
@@ -1146,6 +1140,8 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 		}
 	}
 	file << melhorValor;
+	file.close();
+	bfile.close();
     cout<<endl<<endl<<melhorValor;
 	return melhorValor;
 }
