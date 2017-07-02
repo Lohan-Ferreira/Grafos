@@ -42,7 +42,29 @@ public:
         num_arestas=0;
         num_terminais=0;
     }
-    ~Grafo() {}
+    ~Grafo()
+    {
+        NoListaVertice* tmp = Lista_vertice->Getraiz();
+        int vaux;
+        NoListaAresta* tmp2, *aaux;
+
+        while(tmp!=NULL)
+        {
+            tmp2=tmp->getVertice()->getArestas()->getraiz();
+            while(tmp2!=NULL)
+            {
+                aaux=tmp2;
+                tmp2=tmp2->getProximo();
+                removeAresta(aaux->getAresta()->getAnterior()->getId(),aaux->getAresta()->getProximo()->getId());
+            }
+            delete tmp->getVertice()->getArestas();
+            vaux=tmp->getVertice()->getId();
+            tmp=tmp->getProximo();
+            Lista_vertice->deletaVertice(vaux);
+        }
+        delete Lista_vertice;
+
+    }
 
     //Retorna o Grau de um Nó com um certo id
     int verifGrau(int id)
@@ -1070,9 +1092,10 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 		soma_alpha[i] = 0;
 		enne[i] = 1;
 	}
-
+    cout<<"INICIANDO ITERACOES!"<<endl;
 	for(int i=0;i<10;i++)
     {
+        cout<<i<<endl;
         time_t tempo1 = clock();
         soma_alpha[i]=gulosoRandSteiner(alphas[i],max_iter_rand);
         time_t tempo2 = clock();
@@ -1084,6 +1107,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
 	for(int i = 10; i < max_iter; i++){
 
+        cout<<i<<endl;
 		sorteio = (rand()%1000)/1000.0;
 		//cout<<"\t"<<sorteio<<endl;
 		temp_sorteio = 0;
