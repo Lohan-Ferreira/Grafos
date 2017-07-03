@@ -885,6 +885,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
     float gulosoRandSteiner(float alfa,int num_iteracoes)
     {
+
         srand(time(NULL));
         int sorteado;
         Grafo* solucao;
@@ -1067,9 +1068,31 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
     }
 
 
-    float reativo(float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room){
-    string nameFile = "arquivoSaida.csv";
-    string blockFile = "arquivoSaidaBloco.csv";
+    float reativo(float alphas[], int tam_alpha, int max_iter_rand, int max_iter, int room, int nome){
+    string grafos[10],g_terminais[10];
+    grafos[0]= "64-1.csv";
+    grafos[1]= "64-2.csv";
+    grafos[2]= "64-3.csv";
+    grafos[3]= "64-4.csv";
+    grafos[4]= "1024-1.csv";
+    grafos[5]= "1024-2.csv";
+    grafos[6]= "1024-3.csv";
+    grafos[7]= "4096-1.csv";
+    grafos[8]= "4096-2.csv";
+    grafos[9]= "4096-3.csv";
+
+    g_terminais[0]= "64-1t.csv";
+    g_terminais[1]= "64-2t.csv";
+    g_terminais[2]= "64-3t.csv";
+    g_terminais[3]= "64-4t.csv";
+    g_terminais[4]= "1024-1t.csv";
+    g_terminais[5]= "1024-2t.csv";
+    g_terminais[6]= "1024-3t.csv";
+    g_terminais[7]= "4096-1t.csv";
+    g_terminais[8]= "4096-2t.csv";
+    g_terminais[9]= "4096-3t.csv";
+    //string nameFile = "arquivoSaida.csv";
+    //string blockFile = "arquivoSaidaBloco.csv";
 	int melhorValor = 9999999, valor_qualquer;
 	int temp_sorteio;
 	float sorteio, sum_q;
@@ -1078,8 +1101,15 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 		  enne[tam_alpha],
 		  temp_temp[tam_alpha];
     ofstream file,bfile;
-    file.open(nameFile.c_str(), ios::ate);
-    bfile.open(blockFile.c_str(), ios::ate);
+    //file.open(nameFile.c_str(), ios::ate);
+    //bfile.open(blockFile.c_str(), ios::ate);
+
+    for(int t=0;t<10;t++)
+    {
+        file.open(grafos[t].c_str());
+        bfile.open(g_terminais[t].c_str());
+
+
 
 	for(int i = 0; i < tam_alpha; i++){
 		probabilidades[i] = 1/(float)tam_alpha;
@@ -1138,6 +1168,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
 
 		}
+	}
 	}
 	file << melhorValor;
 	file.close();

@@ -11,8 +11,31 @@ using namespace std;
 int main(){
 
     /** Variáveis */
-    Grafo * grafo = new Grafo(false);
+    Grafo* grafo;
     string temp;
+    string grafos[10],g_terminais[10];
+    grafos[0]= "64-1.txt";
+    grafos[1]= "64-2.txt";
+    grafos[2]= "64-3.txt";
+    grafos[3]= "64-4.txt";
+    grafos[4]= "1024-1.txt";
+    grafos[5]= "1024-2.txt";
+    grafos[6]= "1024-3.txt";
+    grafos[7]= "4096-1.txt";
+    grafos[8]= "4096-2.txt";
+    grafos[9]= "4096-3.txt";
+
+    g_terminais[0]= "64-1t.txt";
+    g_terminais[1]= "64-2t.txt";
+    g_terminais[2]= "64-3t.txt";
+    g_terminais[3]= "64-4t.txt";
+    g_terminais[4]= "1024-1t.txt";
+    g_terminais[5]= "1024-2t.txt";
+    g_terminais[6]= "1024-3t.txt";
+    g_terminais[7]= "4096-1t.txt";
+    g_terminais[8]= "4096-2t.txt";
+    g_terminais[9]= "4096-3t.txt";
+
     float arestemp[3];
     int no;
     float alfa_reativo[10]={0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5};
@@ -21,7 +44,13 @@ int main(){
 
     /** Tratamento de arquivo e construção do grafo*/
     ifstream file;
-    file.open("ins80g.txt");
+
+    for(int t=0;t<10;t++)
+    {
+    grafo = new Grafo(false);
+    cout<<"Abrindo arquivo:"<<grafos[t].c_str()<<endl;
+    file.open(grafos[t].c_str());
+
 
 
     getline(file, temp);
@@ -38,15 +67,18 @@ int main(){
         grafo->addAresta(arestemp[0], arestemp[1], arestemp[2]);
     }
     file.close();
-int c=0;
-    file.open("ins80t.txt");
+    int c=0;
+    file.open(g_terminais[t].c_str());
     while(!file.eof())
     {
         file>>no;
         grafo->setSteiner(no);
         c++;
     }
-    grafo->reativo(alfa_reativo,10,max_iter_rand,max_iter,10);
+    grafo->reativo(alfa_reativo,10,max_iter_rand,max_iter,10,t);
+    delete grafo;
+
+    }
    // grafo->gulosoRandSteiner(0.05,10000);
 
     /** Testes */
