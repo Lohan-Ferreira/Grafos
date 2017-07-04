@@ -962,9 +962,10 @@ void mergeSort(Aresta* arr[], int l, int r)
         Grafo* solucao;
         float melhor_solucao = 9999999999;
         float soma;
+        int* v;
 
         Aresta* candidatos[num_arestas];
-        int cont_arestas=0;
+        int cont_arestas=0,no1,no2;
         int marcadores[gera_id_v] = {0};
         int terminais[num_terminais];
         int c,marcaAnt,marcaProx;
@@ -1066,8 +1067,7 @@ void mergeSort(Aresta* arr[], int l, int r)
 
 
         bool grau1 = false;
-        int* v = solucao->sequenciaGraus();
-        int no1;
+        v = solucao->sequenciaGraus();
         for(int i=0; i<gera_id_v; i++)
         {
             if(v[i]==1 && !Lista_vertice->buscaVertice(i)->getVertice()->getSteiner())
@@ -1082,7 +1082,7 @@ void mergeSort(Aresta* arr[], int l, int r)
         while(grau1)
         {
             grau1=false;
-            int no2 = solucao->getListaVertice()->buscaVertice(no1)->getVertice()->getArestas()->getraiz()->getAresta()->getProximo()->getId();
+            no2 = solucao->getListaVertice()->buscaVertice(no1)->getVertice()->getArestas()->getraiz()->getAresta()->getProximo()->getId();
 
             solucao->removeAresta(no1,no2);
 
@@ -1144,28 +1144,29 @@ void mergeSort(Aresta* arr[], int l, int r)
     grafos[1]= "64-2.csv";
     grafos[2]= "64-3.csv";
     grafos[3]= "64-4.csv";
-    grafos[4]= "1024-1.csv";
-    grafos[5]= "1024-2.csv";
-    grafos[6]= "1024-3.csv";
-    grafos[7]= "4096-1.csv";
-    grafos[8]= "4096-2.csv";
-    grafos[9]= "4096-3.csv";
+    grafos[4]= "256-1.csv";
+    grafos[5]= "256-2.csv";
+    grafos[6]= "256-3.csv";
+    grafos[7]= "512-1.csv";
+    grafos[8]= "512-2.csv";
+    grafos[9]= "512-3.csv";
 
     g_terminais[0]= "64-1t.csv";
     g_terminais[1]= "64-2t.csv";
     g_terminais[2]= "64-3t.csv";
     g_terminais[3]= "64-4t.csv";
-    g_terminais[4]= "1024-1t.csv";
-    g_terminais[5]= "1024-2t.csv";
-    g_terminais[6]= "1024-3t.csv";
-    g_terminais[7]= "4096-1t.csv";
-    g_terminais[8]= "4096-2t.csv";
-    g_terminais[9]= "4096-3t.csv";
+    g_terminais[4]= "256-1t.csv";
+    g_terminais[5]= "256-2t.csv";
+    g_terminais[6]= "256-3t.csv";
+    g_terminais[7]= "512-1t.csv";
+    g_terminais[8]= "512-2t.csv";
+    g_terminais[9]= "512-3t.csv";
     //string nameFile = "arquivoSaida.csv";
     //string blockFile = "arquivoSaidaBloco.csv";
 	int melhorValor = 9999999, valor_qualquer;
 	int temp_sorteio;
 	float sorteio, sum_q;
+	time_t tempo1, tempo2;
 	float soma_alpha[tam_alpha],
 		  probabilidades[tam_alpha],
 		  enne[tam_alpha],
@@ -1189,9 +1190,9 @@ void mergeSort(Aresta* arr[], int l, int r)
 	for(int i=0;i<10;i++)
     {
         cout<<i<<endl;
-        time_t tempo1 = clock();
+         tempo1 = clock();
         soma_alpha[i]=gulosoRandSteiner(alphas[i],max_iter_rand);
-        time_t tempo2 = clock();
+         tempo2 = clock();
         file << soma_alpha[i]<< ";" << alphas[i] <<";"<< (tempo2 - tempo1)  <<endl;
         if(soma_alpha[i]<melhorValor) melhorValor = soma_alpha[i];
     }
@@ -1211,9 +1212,9 @@ void mergeSort(Aresta* arr[], int l, int r)
 		}
 		enne[temp_sorteio]++;
 		//cout<<"\t"<<probabilidades[temp_sorteio]<<endl;
-		time_t tempo1 = clock();
+		 tempo1 = clock();
 		valor_qualquer = gulosoRandSteiner(alphas[temp_sorteio], max_iter_rand);
-		time_t tempo2 = clock();
+		 tempo2 = clock();
 
 		file << valor_qualquer << ";" << alphas[temp_sorteio] <<";"<< (tempo2 - tempo1) <<endl;
 		soma_alpha[temp_sorteio]+=valor_qualquer;
