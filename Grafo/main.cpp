@@ -75,6 +75,7 @@ int main(){
         grafo->setSteiner(no);
         c++;
     }
+    file.close();
     grafo->reativo(alfa_reativo,10,max_iter_rand,max_iter,10,t);
     delete grafo;
 

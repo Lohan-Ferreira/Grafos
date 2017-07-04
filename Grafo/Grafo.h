@@ -883,6 +883,77 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
     }
 
+    void merge(Aresta* arr[], int l, int m, int r)
+{
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 =  r - m;
+
+    /* create temp arrays */
+    Aresta* L[n1], *R[n2];
+
+    /* Copy data to temp arrays L[] and R[] */
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1+ j];
+
+    /* Merge the temp arrays back into arr[l..r]*/
+    i = 0; // Initial index of first subarray
+    j = 0; // Initial index of second subarray
+    k = l; // Initial index of merged subarray
+    while (i < n1 && j < n2)
+    {
+        if (L[i]->getPeso() <= R[j]->getPeso())
+        {
+            arr[k] = L[i];
+            i++;
+        }
+        else
+        {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    /* Copy the remaining elements of L[], if there
+       are any */
+    while (i < n1)
+    {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    /* Copy the remaining elements of R[], if there
+       are any */
+    while (j < n2)
+    {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+/* l is for left index and r is right index of the
+   sub-array of arr to be sorted */
+void mergeSort(Aresta* arr[], int l, int r)
+{
+    if (l < r)
+    {
+        // Same as (l+r)/2, but avoids overflow for
+        // large l and h
+        int m = l+(r-l)/2;
+
+        // Sort first and second halves
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+1, r);
+
+        merge(arr, l, m, r);
+    }
+}
+
     float gulosoRandSteiner(float alfa,int num_iteracoes)
     {
 
@@ -947,8 +1018,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
         while(!verificaSteiner(marcadores,terminais,num_terminais)&&cont_arestas>=0)
         {
-
-            sortingArestas(candidatos,cont_arestas);
+            mergeSort(candidatos,0,cont_arestas-1);
             if(alfa != 0)
             sorteado=rand()%(int)(cont_arestas*alfa+1);
             else sorteado =0;
@@ -1050,7 +1120,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
             {
 
                 solucao->limpaVert();
-            if(!solucao->existeCaminho(terminais[0],terminais[i])) cout << "SOLUCAO INVALIDA!!";
+            if(!solucao->existeCaminho(terminais[0],terminais[i])) soma=99999999;//SOLUÇÃO DEU ERRADO POR ALGUM ERRO NO CODIGO, IGNORAMOS O VALOR
             }
 
             soma=soma/2;
@@ -1104,10 +1174,9 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
     //file.open(nameFile.c_str(), ios::ate);
     //bfile.open(blockFile.c_str(), ios::ate);
 
-    for(int t=0;t<10;t++)
-    {
-        file.open(grafos[t].c_str());
-        bfile.open(g_terminais[t].c_str());
+
+        file.open(grafos[nome].c_str(), ios::ate);
+        bfile.open(g_terminais[nome].c_str(), ios::ate);
 
 
 
@@ -1168,7 +1237,7 @@ bool verificaSteiner(int marcadores[], int terminais[],int num_terminais)
 
 
 		}
-	}
+
 	}
 	file << melhorValor;
 	file.close();

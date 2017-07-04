@@ -110,13 +110,13 @@
 
 1493159766 /home/medina/Documentos/Grafos-master/Grafo/Lista.h
 
-1499089293 source:c:\users\hynax\desktop\grafos-master\grafo\main.cpp
+1499170878 source:c:\users\hynax\desktop\grafos-master\grafo\main.cpp
 	<iostream>
 	<fstream>
 	<stdlib.h>
 	"Grafo.h"
 
-1499089509 c:\users\hynax\desktop\grafos-master\grafo\grafo.h
+1499170957 c:\users\hynax\desktop\grafos-master\grafo\grafo.h
 	"Lista.h"
 	<iostream>
 	<time.h>
